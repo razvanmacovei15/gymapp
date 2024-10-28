@@ -1,7 +1,3 @@
 export default function Sidebar() {
-  return (
-    <div className="align-middle justify-center rounded-lg bg-grey-700 shadow text-blue-300 float-right w-70">
-      RightSidebar Text
-    </div>
-  );
+  return <div className="w-1/5  flex-col flex bg-red-400 m-1 rounded-xl"></div>;
 }

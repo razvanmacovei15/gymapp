@@ -1,12 +1,11 @@
-import { useState } from "react";
-import "./App.css";
-import Login from "./components/login";
-import Sidebar from "./components/sidebar";
+import Sidebar from "./components/Sidebar";
+import MainView from "./components/MainView";
 
 function App() {
   return (
-    <div>
+    <div className="flex flex-row h-screen ">
       <Sidebar />
+      <MainView />
     </div>
   );
 }
