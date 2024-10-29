@@ -23,16 +23,16 @@ export default function Task({ title, creator, category, description, photos, su
   };
 
   return (
-    <div className="bg-gray-100 p-4 rounded-xl shadow-md flex flex-col mb-4 ml-10">
+    <div className="bg-[#c8d4f0] p-4 rounded-xl shadow-md flex flex-col mb-4 ml-7 mr-7">
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-lg font-semibold">{title}</h3>
           <p className="text-sm text-green-600">Created by: {creator}</p>
           <p className="text-sm text-gray-500">Category: {category}</p>
           {subcategory && <p className="text-sm text-gray-500">Subcategory: {subcategory}</p>}
-          <p className={`text-sm ${priority === 'Urgent' ? 'text-red-500' : 'text-gray-500'}`}>Priority: {priority}</p>
+          <p className={`text-sm ${priority === 'Urgent' ? 'text-red-600' : 'text-gray-500'}`}>Priority: {priority}</p>
           <p className="text-sm text-blue-500">Assigned to: {assigned}</p>
-          {deadline && <p className="text-sm text-red-500">Deadline: {deadline}</p>}
+          {deadline && <p className="text-sm text-red-600">Deadline: {deadline}</p>}
           <div onClick={toggleExpand} className="cursor-pointer text-gray-500 hover:text-gray-700 mt-2">
             {isExpanded ? <MdKeyboardArrowUp size={24} /> : <MdKeyboardArrowDown size={24} />}
           </div>
@@ -41,7 +41,7 @@ export default function Task({ title, creator, category, description, photos, su
         {/* Status dropdown */}
         <div className="relative">
           <div onClick={toggleStatusMenu} className="cursor-pointer">
-            <CiCircleCheck size={24} className={`text-3xl ${status === 'Done' ? 'text-green-500' : 'text-gray-500'}`} />
+            <CiCircleCheck size={24} className={`text-3xl ${status === 'Done' ? 'text-green-500' : status === 'In Progress' ? 'text-yellow-600' : 'text-gray-500'}`} />
           </div>
 
           {isStatusMenuOpen && (
