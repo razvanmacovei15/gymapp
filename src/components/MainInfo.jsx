@@ -40,8 +40,8 @@ export default function MainInfo() {
   ];
 
   return (
-    <div className="bg-blue-400 h-full rounded-xl m-1 p-4">
-      <h2 className="text-5xl font-bold m-10 text-left ml-10 ">TASKS</h2>
+    <div className="bg-[#455271] h-full rounded-xl m-1 p-4">
+      <h2 className="text-5xl font-bold m-10 text-left ml-7 ">TASKS</h2>
       <div className="space-y-4">
         {tasks.map((task, index) => (
           <Task
