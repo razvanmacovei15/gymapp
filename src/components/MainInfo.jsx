@@ -17,7 +17,7 @@ export default function MainInfo() {
     },
     {
       title: 'PROBLEMA CASA MARCAT',
-      creator: 'Maica-ta',
+      creator: 'Andreea',
       category: 'Curatenie/casa',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       photos: ['https://via.placeholder.com/150'],
