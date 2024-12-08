@@ -1,0 +1,111 @@
+/* Center the login container on the screen */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  background-color: #a9b1c7; /* Light background color */
+  margin: 0; /* Remove default margin */
+  }
+  
+  /* Styling the login box */
+  .login-box {
+    background-color: #d0d5df;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Styling for the form group */
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  /* Input fields styling */
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #000033;
+    border-radius: 5px;
+    background-color: #000033;
+    color: white;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  /* Focus state for input fields */
+  .input-field:focus {
+    border-color: #5a9bd6;
+    box-shadow: 0 0 5px rgba(90, 155, 214, 0.5);
+  }
+  
+  /* Password wrapper styling */
+  .password-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Password visibility toggle button */
+  .toggle-password {
+    margin-left: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #000;
+    padding: 0;
+  }
+  
+  .toggle-password:focus {
+    outline: none;
+  }
+  
+  /* Button group styling */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Login button styling */
+  .login-button,
+  .create-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #000033;
+    color: white;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover,
+  .create-button:hover {
+    background-color: #5a9bd6;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 400px) {
+    .login-box {
+      width: 100%;
+      padding: 15px;
+    }
+  
+    .button-group {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .login-button,
+    .create-button {
+      width: 100%;
+    }
+  }
+
+  
