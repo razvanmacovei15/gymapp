@@ -1,0 +1,88 @@
+/* Full-page container for the sign-up page */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background-color: #a9b1c7; /* Light background color */
+    margin: 0;
+  }
+  
+  /* Sign-up box styling */
+  .signup-box {
+    background-color: #d0d5df;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form group styling */
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  /* Input field styling */
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #000033;
+    border-radius: 5px;
+    background-color: #000033;
+    color: white;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  /* Focus state for input fields */
+  .input-field:focus {
+    border-color: #5a9bd6;
+    box-shadow: 0 0 5px rgba(90, 155, 214, 0.5);
+  }
+  
+  /* Password wrapper for visibility toggle */
+  .password-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* Toggle visibility button */
+  .toggle-visibility {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+  }
+  
+  /* Button group for Login and Create buttons */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Signup buttons */
+  .signup-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #000033;
+    color: white;
+    font-size: 16px;
+    width: 48%; /* To make the buttons side-by-side */
+    transition: background-color 0.3s ease;
+  }
+  
+  .signup-button:hover {
+    background-color: #5a9bd6;
+  }
+  
