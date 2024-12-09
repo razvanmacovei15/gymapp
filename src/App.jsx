@@ -7,10 +7,10 @@ import SignUp from "./pages/SignUp";
 function App() {
   return (
     <div className="flex flex-row h-screen ">
-      {/* { <Sidebar />
+       <Sidebar />
       <MainView />
-      <Login />} */}
-      <SignUp />
+      {/* <Login /> */}
+      {/* <SignUp /> */}
     </div>
   );
 }
