@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Multiselect from "multiselect-react-dropdown";
 
+
 export default function AddTaskModal({ onSubmit, onClose }) {
   const [formData, setFormData] = useState({
     category: "",
@@ -12,6 +13,30 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     gyms: [],
     users: [],
   });
+
+/*   const [users, setUsers] = useState([]);
+  const getUsers = async() =>{
+    const response = await axios.get("http://maco-coding.go.ro:8010/users/all");
+    return setUsers(response.data);
+  } 
+
+  const [gyms, setGyms] = useState([]);
+  const getGyms = async() =>{
+    const response = await axios.get("http://maco-coding.go.ro:8010/users/all");
+    return setGyms(response.data);
+  } 
+
+  const [category, setCategory] = useState([]);
+  const getCategories = async() =>{
+    const response = await axios.get("http://maco-coding.go.ro:8010/categories/all");
+    return setCategory(response.data);
+  }
+
+  const [subcategory, setSubcategory] = useState([]);
+  const getSubcategories = async() =>{
+    const response = await axios.get("http://maco-coding.go.ro:8010/subcategories/all");
+    return setSubcategory(response.data);
+  } */
 
   const userOptions = [
     { name: "User1", id: 1 },
