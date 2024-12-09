@@ -38,6 +38,9 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     return setSubcategory(response.data);
   } */
 
+
+    console.log(formData);
+
   const userOptions = [
     { name: "User1", id: 1 },
     { name: "User2", id: 2 },
