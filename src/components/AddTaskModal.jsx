@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Multiselect from "multiselect-react-dropdown";
+import { useEffect } from "react";
+import axios from "axios";
 
 
 export default function AddTaskModal({ onSubmit, onClose }) {
@@ -14,7 +16,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     users: [],
   });
 
-/*   const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const getUsers = async() =>{
     const response = await axios.get("http://maco-coding.go.ro:8010/users/all");
     return setUsers(response.data);
@@ -22,24 +24,31 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   const [gyms, setGyms] = useState([]);
   const getGyms = async() =>{
-    const response = await axios.get("http://maco-coding.go.ro:8010/users/all");
+    const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all");
     return setGyms(response.data);
   } 
 
-  const [category, setCategory] = useState([]);
-  const getCategories = async() =>{
-    const response = await axios.get("http://maco-coding.go.ro:8010/categories/all");
-    return setCategory(response.data);
-  }
+  const [categories, setCategories] = useState([]);
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/category");
+      console.log("Fetched Categories:", response.data); // Log to verify data
+      setCategories(response.data); // Update state with categories
+    } catch (error) {
+      console.error("Failed to fetch categories:", error); // Log any errors
+    }
+  };
 
-  const [subcategory, setSubcategory] = useState([]);
-  const getSubcategories = async() =>{
-    const response = await axios.get("http://maco-coding.go.ro:8010/subcategories/all");
-    return setSubcategory(response.data);
-  } */
-
-
-    console.log(formData);
+  const [subcategories, setSubcategories] = useState([]);
+  const fetchSubcategories = async () => {
+    try {
+      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/subcategories");
+      console.log("Fetched Subcategories:", response.data); // Log to verify data
+      setSubcategories(response.data); // Update state with categories
+    } catch (error) {
+      console.error("Failed to fetch Subcategories:", error); // Log any errors
+    }
+  };
 
   const userOptions = [
     { name: "User1", id: 1 },
@@ -81,6 +90,12 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     onSubmit({ ...formData, users: selectedUsers, gyms: selectedGyms });
   };
 
+  useEffect(() => {
+    fetchCategories();
+    fetchSubcategories();
+
+  }, []);
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -94,7 +109,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           Add New Task
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Category */}
+          {/* Categories */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
               Category
@@ -107,10 +122,34 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               required
             >
               <option value="">Select Category</option>
-              <option value="Category1">Category1</option>
-              <option value="Category2">Category2</option>
+                {categories.map((cat, index) => (
+                <option key={index} value={cat}>
+                    {cat}
+                </option>
+                ))}
             </select>
           </div>
+          
+          {/* Subcategories */}
+            <div>
+                <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Subcategory
+                </label>
+                <select
+                name="subcategory"
+                value={formData.subcategory}
+                onChange={handleInputChange}
+                className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+                required
+                >
+                <option value="">Select Subcategory</option>
+                    {subcategories.map((subcat, index) => (
+                    <option key={index} value={subcat}>
+                        {subcat}
+                    </option>
+                    ))}
+                </select>
+            </div>
 
           {/* Title */}
           <div>
