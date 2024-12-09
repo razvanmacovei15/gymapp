@@ -5,7 +5,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { CiCircleCheck } from "react-icons/ci";
 
 // Display task details with optional subcategory and deadline
-export default function Task({ taskId, title, creator, category, description, photos, subcategory, priority, deadline, gyms, users }) {
+export default function Task({ taskId, title, creator, category, description, subcategory, priority, deadline, gyms, users }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isStatusMenuOpen, setIsStatusMenuOpen] = useState(false);
   const [status, setStatus] = useState("Not Started");
@@ -80,20 +80,6 @@ export default function Task({ taskId, title, creator, category, description, ph
       {isExpanded && (
         <div className="mt-4">
           <p className="text-sm text-gray-700 mb-2">{description}</p>
-          <div className="flex gap-2">
-            {photos && photos.length > 0 ? (
-              photos.map((photo, index) => (
-                <img
-                  key={index}
-                  src={photo}
-                  alt={`Task photo ${index + 1}`}
-                  className="w-24 h-24 object-cover rounded-md"
-                />
-              ))
-            ) : (
-              <p className="text-sm text-gray-500">No photos provided</p>
-            )}
-          </div>
         </div>
       )}
 
