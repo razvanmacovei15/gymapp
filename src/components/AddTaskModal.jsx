@@ -7,7 +7,7 @@ import axios from "axios";
 export default function AddTaskModal({ onSubmit, onClose }) {
   const [formData, setFormData] = useState({
     category: "",
-    title: "",
+    // title: "",
     description: "",
     deadline: "",
     priority: "",
@@ -18,7 +18,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   const [users, setUsers] = useState([]);
   const getUsers = async() =>{
-    const response = await axios.get("http://maco-coding.go.ro:8010/users/all");
+    const response = await axios.get("http://maco-coding.go.ro:8010/api/users/managers");
     return setUsers(response.data);
   } 
 
@@ -42,27 +42,13 @@ export default function AddTaskModal({ onSubmit, onClose }) {
   const [subcategories, setSubcategories] = useState([]);
   const fetchSubcategories = async () => {
     try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/subcategories");
+      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/subcategory");
       console.log("Fetched Subcategories:", response.data); // Log to verify data
       setSubcategories(response.data); // Update state with categories
     } catch (error) {
       console.error("Failed to fetch Subcategories:", error); // Log any errors
     }
   };
-
-  const userOptions = [
-    { name: "User1", id: 1 },
-    { name: "User2", id: 2 },
-    { name: "User3", id: 3 },
-    { name: "User4", id: 4 },
-  ];
-
-  const gymOptions = [
-    { name: "Gym1", id: 1 },
-    { name: "Gym2", id: 2 },
-    { name: "Gym3", id: 3 },
-    { name: "Gym4", id: 4 },
-  ];
 
   // Handle input change for non-multiselect fields
   const handleInputChange = (e) => {
@@ -88,13 +74,20 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
     // Pass formatted data to parent component
     onSubmit({ ...formData, users: selectedUsers, gyms: selectedGyms });
+
+    console.log("Form Data:", formData);
+    console.log("Selected Users:", selectedUsers);
+    console.log("Selected Gyms:", selectedGyms);
   };
 
   useEffect(() => {
     fetchCategories();
     fetchSubcategories();
+    getUsers();
+    getGyms();
 
   }, []);
+
 
   return (
     <div
@@ -159,7 +152,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
             <input
               type="text"
               name="title"
-              value={formData.title}
+              value={"formData.title"}
               onChange={handleInputChange}
               className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
               placeholder="Enter task title..."
@@ -188,7 +181,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               Users
             </label>
             <Multiselect
-              options={userOptions}
+              options={users}
               selectedValues={formData.users}
               onSelect={handleSelectUsers}
               onRemove={handleSelectUsers}
@@ -205,7 +198,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               Gyms
             </label>
             <Multiselect
-              options={gymOptions}
+              options={gyms}
               selectedValues={formData.gyms}
               onSelect={handleSelectGyms}
               onRemove={handleSelectGyms}
@@ -250,6 +243,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           {/* Submit Button */}
           <button
             type="submit"
+
             className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-lg w-full hover:shadow-xl transform hover:scale-105 transition duration-300"
           >
             Add Task

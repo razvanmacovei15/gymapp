@@ -26,7 +26,7 @@ export default function Task({ taskId, title, creator, category, description, su
     <div className="bg-[#c8d4f0] p-4 rounded-xl shadow-md flex flex-col mb-4 ml-7 mr-7">
       <div className="flex justify-between items-center">
         <div>
-          {/* <h3 className="text-lg font-semibold">{title}</h3> */}
+          <h3 className="text-lg font-semibold">{title}</h3>
           <p className="text-sm text-green-600">Created by: {creator}</p>
           <p className="text-sm text-gray-500">Gyms: 
             {gyms.map((gym, index) => (<span key={gym.id} className="gym">

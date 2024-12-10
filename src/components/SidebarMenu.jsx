@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import "./SidebarMenu.css"; // CSS file for styling
 
+import { useAuth } from "./AuthProvider";
+
 const menuData = [
   { title: "Dashboard", path: "/" },
   {
@@ -21,6 +23,8 @@ const menuData = [
 ];
 
 export default function SidebarMenu() {
+  const { handleLogout } = useAuth();
+
   const [expandedCategories, setExpandedCategories] = useState({});
 
   const toggleCategory = (title) => {
@@ -60,7 +64,7 @@ export default function SidebarMenu() {
       </ul>
 
       <div className="logout">
-        <button className="logout-button">Log out</button>
+        <button onClick={handleLogout} className="logout-button">Log out</button>
       </div>
     </div>
   );
