@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 import { useAuth, User } from "./AuthProvider";
 import React from "react";
 import LoginPage from "../pages/LoginPage";
+import UnauthorizedPage from "./UnauthorizedPage";
 
 type ProtectedRouteProps = PropsWithChildren & {
   allowedRoles: User["role"];
@@ -23,8 +24,7 @@ export default function ProtectedRoute({
     currentUser === null ||
     (allowedRoles && !allowedRoles.includes(currentUser.role))
   ) {
-    alert("You are not allowed to access this page");
-    return <LoginPage />;
+    return <UnauthorizedPage />;
   }
 
   return children;
