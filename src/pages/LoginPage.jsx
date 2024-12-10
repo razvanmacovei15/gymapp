@@ -1,26 +1,72 @@
 import React, { useState } from 'react';
-import './LoginPage.css'; // Make sure this file exists for styling
+import './LoginPage.css'; // Ensure this file exists for styling
+import { useAuth } from '../components/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const { handleLogin } = useAuth();
+  const navigate = useNavigate();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevState) => !prevState);
   };
 
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  // Submit login
+  const submitLogin = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    if (!formData.email || !formData.password) {
+      alert('Please enter email and password');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      if (handleLogin) {
+        await handleLogin(formData.email, formData.password);
+        navigate('/'); // Navigate to the home page after successful login
+      } else {
+        alert('Login function not found');
+      }
+    } catch (error) {
+      console.error('Login failed', error);
+      alert('Login failed');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
         <h1>Welcome Back!</h1>
-        <form>
+        <form onSubmit={submitLogin}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
-              type="email"
+              type="text"
               id="email"
               placeholder="Enter your email"
               className="input-field"
+              value={formData.email}
+              onChange={handleChange}
               required
             />
           </div>
@@ -32,6 +78,8 @@ const LoginPage = () => {
                 id="password"
                 placeholder="Enter your password"
                 className="input-field"
+                value={formData.password}
+                onChange={handleChange}
                 required
               />
               <button
@@ -45,10 +93,10 @@ const LoginPage = () => {
             </div>
           </div>
           <div className="button-group">
-            <button type="submit" className="login-button">
-              Login
+            <button type="submit" className="login-button" disabled={isSubmitting}>
+              {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
-            <button type="button" className="create-button">
+            <button onClick={()=>navigate("/signup")}type="button" className="create-button">
               Create
             </button>
           </div>
