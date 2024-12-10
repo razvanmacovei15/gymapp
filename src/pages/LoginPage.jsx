@@ -41,6 +41,7 @@ const LoginPage = () => {
     try {
       if (handleLogin) {
         await handleLogin(formData.email, formData.password);
+        console.log('Login successful');
         navigate('/'); // Navigate to the home page after successful login
       } else {
         alert('Login function not found');
