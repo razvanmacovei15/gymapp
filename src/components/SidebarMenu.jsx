@@ -32,7 +32,7 @@ export default function SidebarMenu() {
 
   return (
     <div className="sidebar-menu">
-      <h2 className="sidebar-header">MYGYM FITNESS CLUB</h2>
+      <h2 className="sidebar-header">MYGYM</h2>
 
       <ul className="menu-list">
         {menuData.map((item) => (
