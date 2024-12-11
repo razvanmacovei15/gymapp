@@ -25,6 +25,7 @@ export default function ProtectedRoute({
     (allowedRoles && !allowedRoles.includes(currentUser.role))
   ) {
     return <UnauthorizedPage />;
+    
   }
 
   return children;
