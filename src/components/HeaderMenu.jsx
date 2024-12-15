@@ -8,8 +8,9 @@ export default function HeaderMenu({ toggleSidebar }) {
         size={30}
         className="cursor-pointer"
         onClick={toggleSidebar} // Call the toggle function
+        color="white"
       />
-      <h2 className="font-semibold text-2xl ml-1">Welcome back!</h2>
+      <h2 className="font-normal text-2xl ml-1 text-white">Welcome back!</h2>
     </div>
   );
 }

@@ -91,7 +91,7 @@ export default function MainInfo() {
 
 
   return (
-    <div className="bg-[#455271] h-full rounded-xl m-1 p-4">
+    <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full  p-4">
       <h2 className="text-5xl font-bold m-10 text-left ml-7" onClick={()=>{
         console.log(authState.authToken);
         fetchRolesData();
@@ -102,34 +102,14 @@ export default function MainInfo() {
         <p className="text-red-500 text-center">{error}</p>
       ) : (
         <div className="space-y-4">
-          {/* {tasks.length > 0 ? (
-            tasks.map((task) => (
-              <Task
-                key={task.taskId} 
-                id={task.taskDTO.taskId}
-                title={"TITLU FOARTE INTERESANT"}
-                creator={task.taskDTO.creator}
-                category={task.taskDTO.category}
-                description={task.taskDTO.description}
-                subcategory={task.taskDTO.subcategory}
-                priority={task.taskDTO.priority}
-                deadline={task.taskDTO.deadline}
-                gyms={task.gyms}
-                users={task.users}
-              />
-            ))
-          ) : (
-            <p className="text-white text-center">No tasks available</p> // Handle empty tasks list
-         )} */}
-         <TaskTable tasks={transformedTasks} loading={loading} error={error} />;
-
+          <TaskTable tasks={transformedTasks} loading={loading} error={error} />
         </div>
       )}
 
       {/* "+" Button */}
       <button
         onClick={toggleModal}
-        className="fixed bottom-4 right-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
+        className="fixed bottom-4 right-4 bg-black text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
       >
         +
       </button>

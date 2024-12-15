@@ -25,7 +25,7 @@ export default function TopBar({ toggleSidebar }) {
   }, []);
 
   return (
-    <header className="h-32 bg-[#455271] rounded-xl mx-1 mt-1 flex justify-between items-center px-8 py-4">
+    <header className="h-32 bg-gradient-to-t from-gray-950 to-pink-950 flex justify-between items-center px-8 py-4">
       <HeaderMenu toggleSidebar={toggleSidebar} />
       <div className="flex items-center gap-4">
         <NotificationAndGymSelector

@@ -64,7 +64,7 @@ export default function SidebarMenu() {
       </ul>
 
       <div className="logout">
-        <button onClick={handleLogout} className="logout-button">Log out</button>
+        <button onClick={handleLogout} className="logout-button bg-transparent">Log out</button>
       </div>
     </div>
   );
