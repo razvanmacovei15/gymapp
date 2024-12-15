@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext", // Use the latest ECMAScript version
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Include browser types
+    "jsx": "react-jsx", // Enables modern JSX transforms
+    "module": "ESNext", // Use ES module syntax
+    "moduleResolution": "Node", // Resolve modules like Node.js
+    "strict": true, // Enable strict type-checking
+    "esModuleInterop": true, // Allow default imports from CommonJS modules
+    "skipLibCheck": true, // Skip type checking for library files
+    "allowJs": true
+  },
+  "include": ["src/**/*"], // Include all frontend source files
+  "exclude": ["node_modules", "dist"] // Exclude unnecessary files
+}

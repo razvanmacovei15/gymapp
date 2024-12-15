@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddTaskModal from "./AddTaskModal";
 import { useAuth } from "./AuthProvider";
-import Task from "./Task";
+import TaskTable from "./table/task-table";
 
 export default function MainInfo() {
   const { authState } = useAuth();
@@ -22,7 +22,8 @@ export default function MainInfo() {
       };
       const response = await axios.get("http://maco-coding.go.ro:8010/tasks/all", config);
       setTasks(response.data);
-      console.log(tasks);
+      console.log("Tasks from API:", tasks);
+
     } catch (err) {
       console.error("Failed to fetch tasks:", err);
       setError("Failed to fetch tasks.");
@@ -67,6 +68,9 @@ export default function MainInfo() {
     }
   };
 
+  const transformedTasks = tasks.map((task) => ({ ...task.taskDTO }));
+
+
   return (
     <div className="bg-[#455271] h-full rounded-xl m-1 p-4">
       <h2 className="text-5xl font-bold m-10 text-left ml-7" onClick={()=>{
@@ -79,7 +83,7 @@ export default function MainInfo() {
         <p className="text-red-500 text-center">{error}</p>
       ) : (
         <div className="space-y-4">
-          {tasks.length > 0 ? (
+          {/* {tasks.length > 0 ? (
             tasks.map((task) => (
               <Task
                 key={task.taskId} 
@@ -97,7 +101,9 @@ export default function MainInfo() {
             ))
           ) : (
             <p className="text-white text-center">No tasks available</p> // Handle empty tasks list
-         )}
+         )} */}
+         <TaskTable tasks={transformedTasks} loading={loading} error={error} />;
+
         </div>
       )}
 
