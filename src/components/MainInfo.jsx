@@ -49,8 +49,27 @@ export default function MainInfo() {
     }
   };
 
+  const fetchTaskStatuses = async () => {
+    try {
+      setLoading(true);
+
+      const config = {
+        headers: { Authorization: `Bearer ${authState.authToken}` }
+      };
+      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/taskStatus", config);
+      console.log("statuses: " + response.data);
+    } catch (err) {
+      console.error("Failed to fetch task statuses:", err);
+      setError("Failed to fetch task statuses.");
+    } finally {
+      setLoading(false);
+  };
+}
+  
+
   useEffect(() => {
     fetchTasksData();
+    fetchTaskStatuses();
   }, []);
 
   const toggleModal = () => {

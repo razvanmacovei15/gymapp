@@ -13,8 +13,6 @@ export default function NotificationAndGymSelector({ locations, onLocationChange
 
   return (
     <div className="flex items-center gap-4">
-      <FaBell size={24} className="cursor-pointer" />
-
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <MenuButton className="inline-flex justify-center gap-x-1.5 rounded-md bg-[#2a333f] px-3 py-2 text-sm font-semibold text-[#c8d4f0] shadow-sm ring-1 ring-inset ring-gray-600 hover:bg-[#465669]">
@@ -44,6 +42,9 @@ export default function NotificationAndGymSelector({ locations, onLocationChange
           </div>
         </MenuItems>
       </Menu>
+      <FaBell size={24} className="cursor-pointer" />
+
+      
     </div>
   );
 }
