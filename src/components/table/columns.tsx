@@ -16,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataTableColumnHeader } from "./column-header";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -74,7 +75,9 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "deadline",
-    header: "Deadline",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Deadline" />
+    ),
   },
   {
     id: "actions",
