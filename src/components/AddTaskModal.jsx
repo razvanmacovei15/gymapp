@@ -228,7 +228,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-lg w-full hover:shadow-xl transform hover:scale-105 transition duration-300"
+            className="bg-gradient-to-r from-black to-pink-950 text-white py-3 px-4 rounded-lg w-full hover:shadow-xl transform hover:scale-105 transition duration-300"
           >
             Add Task
           </button>
