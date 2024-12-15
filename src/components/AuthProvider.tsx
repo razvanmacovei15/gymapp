@@ -1,13 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
-
-export type User = {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-};
+import { User } from "./types/User";
 
 type AuthContext = {
   authState: { authToken?: string | null; currentUser?: User | null };
@@ -129,6 +123,28 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     handleLogout,
     handleRegister,
   };
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (token) {
+        try {
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          const response = await axios.get(`${API_URL}/auth/me`); // Verify the token
+          console.log("verification response" + response.data);
+          setAuthState({
+            authToken: token,
+            currentUser: response.data.user,
+          });
+        } catch (error) {
+          console.error("Token validation failed:", error);
+          handleLogout(); // Clear invalid token and user state
+        }
+      }
+    };
+
+    initializeAuth();
+  }, []);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
