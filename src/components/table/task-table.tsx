@@ -11,7 +11,7 @@ interface TaskTableProps {
 
 export default function TaskTable({ tasks, loading, error }: TaskTableProps) {
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading.....</div>;
   }
 
   if (error) {
