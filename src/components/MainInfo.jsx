@@ -3,6 +3,7 @@ import axios from "axios";
 import AddTaskModal from "./AddTaskModal";
 import { useAuth } from "./AuthProvider";
 import TaskTable from "./table/task-table";
+import FileUploader from "./file-uploader/FileUploader";
 
 export default function MainInfo() {
   const { authState } = useAuth();
@@ -92,7 +93,7 @@ export default function MainInfo() {
 
   return (
     <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full  p-4">
-      <h2 className="text-5xl font-bold m-10 text-left ml-7" onClick={()=>{
+      <h2 className="text-5xl font-bold m-10 text-left text-white ml-7" onClick={()=>{
         console.log(authState.authToken);
         fetchRolesData();
       }}>TASKS</h2>
@@ -103,7 +104,11 @@ export default function MainInfo() {
       ) : (
         <div className="space-y-4">
           <TaskTable tasks={transformedTasks} loading={loading} error={error} />
+          <div>
+            <FileUploader />
+          </div>
         </div>
+        
       )}
 
       {/* "+" Button */}
