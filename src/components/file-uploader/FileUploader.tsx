@@ -1,6 +1,5 @@
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
-import { set } from "rsuite/esm/internals/utils/date";
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
 
@@ -8,6 +7,8 @@ export default function FileUploader() {
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [bucketName, setBucketName] = useState<string>(""); // New state for bucket name
+  const [objectName, setObjectName] = useState<string>(""); // New state for object name
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
@@ -15,27 +16,41 @@ export default function FileUploader() {
     }
   }
 
+  function handleBucketNameChange(event: ChangeEvent<HTMLInputElement>) {
+    setBucketName(event.target.value);
+  }
+
+  function handleObjectNameChange(event: ChangeEvent<HTMLInputElement>) {
+    setObjectName(event.target.value);
+  }
+
   async function uploadFile() {
-    if (!file) return;
+    if (!file || !bucketName || !objectName) return;
 
     setUploadStatus("uploading");
     setUploadProgress(0);
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("bucketName", bucketName);
+    formData.append("objectName", objectName);
 
     try {
-      await axios.post("https://httpbin.org/post", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress: (progressEvent) => {
-          const progress = progressEvent.total
-            ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            : 0;
-          setUploadProgress(progress);
-        },
-      });
+      await axios.post(
+        "http://maco-coding.go.ro:8010/minio/uploadFile",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const progress = progressEvent.total
+              ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              : 0;
+            setUploadProgress(progress);
+          },
+        }
+      );
       setUploadStatus("success");
       setUploadProgress(100);
     } catch {
@@ -43,8 +58,23 @@ export default function FileUploader() {
       setUploadProgress(0);
     }
   }
+
   return (
     <div className="space-y-2">
+      <input
+        type="text"
+        placeholder="Bucket Name"
+        value={bucketName}
+        onChange={handleBucketNameChange}
+        className="text-black"
+      />
+      <input
+        type="text"
+        placeholder="Object Name"
+        value={objectName}
+        onChange={handleObjectNameChange}
+        className="text-black"
+      />
       <input type="file" onChange={handleFileChange} className="text-white" />
       {file && (
         <div className="mb-4 text-sm text-white">
@@ -61,10 +91,10 @@ export default function FileUploader() {
               style={{ width: `${uploadProgress}%` }}
             ></div>
           </div>
-          <p className="text-sm text-gray-600"> {uploadProgress}% upload</p>
+          <p className="text-sm text-gray-600">{uploadProgress}% upload</p>
         </div>
       )}
-      {file && uploadStatus != "uploading" && (
+      {file && uploadStatus !== "uploading" && (
         <>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
