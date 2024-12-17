@@ -124,7 +124,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     handleRegister,
   };
 
-  useEffect(() => {
+/*   useEffect(() => {
     const initializeAuth = async () => {
       const token = localStorage.getItem(TOKEN_KEY);
       if (token) {
@@ -145,7 +145,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     initializeAuth();
   }, []);
-
+ */
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );

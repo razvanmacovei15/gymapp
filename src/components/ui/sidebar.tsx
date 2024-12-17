@@ -357,7 +357,7 @@ const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2 h-32 justify-center pb-7 items-center text-2xl", className)}
       {...props}
     />
   )
@@ -504,7 +504,7 @@ const SidebarMenuItem = React.forwardRef<
   <li
     ref={ref}
     data-sidebar="menu-item"
-    className={cn("group/menu-item relative", className)}
+    className={cn("group/menu-item relative pb-5", className)}
     {...props}
   />
 ))

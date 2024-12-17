@@ -5,8 +5,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import UserProfile from "./UserProfile";
 import { UserNav } from "./top-bar/user-nav";
+import { useSidebar } from "./ui/sidebar";
 
-export default function TopBar({ toggleSidebar }) {
+export default function TopBar( ) {
+
+  const {open, toggleSidebar} = useSidebar();
 
   const [gyms, setGyms] = useState([]);
 
