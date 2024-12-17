@@ -57,10 +57,10 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>Welcome Back!</h1>
+        <h1 style={{ color: 'white' }}>Welcome Back!</h1>
         <form onSubmit={submitLogin}>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" style={{ color: 'white' }}>Email</label>
             <input
               type="text"
               id="email"
@@ -72,7 +72,7 @@ const LoginPage = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" style={{ color: 'white' }}>Password</label>
             <div className="password-wrapper">
               <input
                 type={passwordVisible ? 'text' : 'password'}
@@ -97,7 +97,7 @@ const LoginPage = () => {
             <button type="submit" className="login-button" disabled={isSubmitting}>
               {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
-            <button onClick={()=>navigate("/signup")}type="button" className="create-button">
+            <button onClick={() => navigate("/signup")} type="button" className="create-button">
               Create
             </button>
           </div>

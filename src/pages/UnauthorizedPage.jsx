@@ -13,7 +13,7 @@ const UnauthorizedPage = () => {
         </h1>
         <button
           onClick={handleGoBack}
-          className="px-6 py-3 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="px-6 py-3 bg-pink-950 text-white font-medium rounded hover:bg-pink-700 focus:outline-none focus:ring focus:ring-pink-300"
         >
           Go back to login page
         </button>

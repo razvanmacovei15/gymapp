@@ -59,10 +59,10 @@ const SignUpPage = () => {
   return (
     <div className="signup-container">
       <div className="signup-box">
-        <h1>WELCOME!</h1>
+        <h1 style={{ color: 'white' }}>WELCOME!</h1>
         <form onSubmit={handleSubmit}>
         <div className="form-group">
-            <label htmlFor="email">Username</label>
+            <label htmlFor="email" style={{ color: 'white' }}>Username</label>
             <input
               type="text"
               id="name"
@@ -74,7 +74,7 @@ const SignUpPage = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" style={{ color: 'white' }}>Email</label>
             <input
               type="text"
               id="email"
@@ -86,7 +86,7 @@ const SignUpPage = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" style={{ color: 'white' }}>Password</label>
             <div className="password-wrapper">
               <input
                 type={passwordVisible ? "text" : "password"}
