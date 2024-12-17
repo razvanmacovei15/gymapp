@@ -12,6 +12,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { usePopup } from "../popups/PopupContext";
 
 export function UserNav() {
   const { authState, handleLogout } = useAuth();
@@ -20,6 +21,8 @@ export function UserNav() {
   // Conditionally update user details if the user is an admin
   const displayName = user?.name === "admin" ? "Admin" : user?.name;
   const displayEmail = user?.name === "admin" ? "admin@gmail.com" : user?.email;
+
+  const { toggleProfileMenu } = usePopup();
 
   return (
     <DropdownMenu>
@@ -42,20 +45,13 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            'TODO' <br /> Change Profile Picture :D
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+          <DropdownMenuItem onClick={toggleProfileMenu}>
+            Details
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -3,5 +3,5 @@ export type User = {
   email: string;
   name: string;
   role: string;
-  profilePicture: string;
+  preSignedPhotoUrl: string;
 };

@@ -4,7 +4,11 @@ import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { User } from "./types/User";
 
 type AuthContext = {
-  authState: { authToken?: string | null; currentUser?: User | null };
+  authState: {
+    authToken?: string | null;
+    currentUser?: User | null;
+    preSignedUrl?: string;
+  };
   handleLogin?: (email: string, password: string) => Promise<any>;
   handleLogout: () => Promise<any>;
   handleRegister: (
@@ -13,6 +17,7 @@ type AuthContext = {
     password: string,
     role: string
   ) => Promise<any>;
+  profilePhoto: string;
 };
 
 const TOKEN_KEY = "authToken";
@@ -30,6 +35,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     authToken: localStorage.getItem(TOKEN_KEY),
     currentUser: null,
   });
+  const [profilePhoto, setProfilePhoto] = useState<string>("");
+
+  async function fetchProfilePhoto() {
+    try {
+      const result = await axios.get(`${API_URL}/minio/generate-url`);
+      console.log(result.data);
+      setProfilePhoto(result.data);
+      return result.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async function handleLogin(email: string, password: string) {
     try {
@@ -122,6 +139,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     handleLogin,
     handleLogout,
     handleRegister,
+    profilePhoto,
   };
 
   useEffect(() => {
@@ -129,17 +147,21 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const token = localStorage.getItem(TOKEN_KEY);
       if (token) {
         try {
+          console.log("Token from localStorage:", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          const response = await axios.get(`${API_URL}/auth/me`); // Verify the token
-          console.log("verification response" + response.data);
+          const response = await axios.get(`${API_URL}/auth/me`);
+          console.log("Token verification response:", response.data);
+
           setAuthState({
             authToken: token,
             currentUser: response.data.user,
           });
-        } catch (error) {
-          console.error("Token validation failed:", error);
+        } catch (error: any) {
+          console.error("Token verification failed:", error.response || error);
           handleLogout(); // Clear invalid token and user state
         }
+      } else {
+        console.log("No token found in localStorage");
       }
     };
 

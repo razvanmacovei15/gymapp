@@ -1,6 +1,6 @@
 import MainInfo from "./MainInfo";
 import TopBar from "./TopBar";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar";
 import { useState } from "react";
 
 export default function MainView() {
@@ -20,7 +20,8 @@ export default function MainView() {
           isSidebarOpen ? "ml-[250px]" : "ml-0"
         }`}
       >
-        <TopBar toggleSidebar={toggleSidebar} /> {/* Pass toggle function to TopBar */}
+        <TopBar toggleSidebar={toggleSidebar} />{" "}
+        {/* Pass toggle function to TopBar */}
         <MainInfo />
       </div>
     </div>

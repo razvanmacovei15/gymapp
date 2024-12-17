@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./column-header";
+import { usePopup } from "../popups/PopupContext";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -83,6 +84,7 @@ export const columns: ColumnDef<Task>[] = [
     id: "actions",
     cell: ({ row }) => {
       const task = row.original;
+      const { toggleTaskView } = usePopup();
 
       return (
         <DropdownMenu>
@@ -94,7 +96,9 @@ export const columns: ColumnDef<Task>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>View task details</DropdownMenuItem>
+            <DropdownMenuItem onClick={toggleTaskView}>
+              View task details
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
