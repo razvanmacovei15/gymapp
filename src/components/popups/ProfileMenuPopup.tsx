@@ -142,7 +142,12 @@ const ProfileMenuPopup = () => {
             onChange={handleFileChange} // Handle file selection
           />
         </div>
-        {authState.currentUser && <ProfileForm user={authState.currentUser} />}
+        {authState.currentUser && (
+          <ProfileForm
+            user={authState.currentUser}
+            toggleProfileMenu={toggleProfileMenu}
+          />
+        )}
       </div>
     </div>
   );
