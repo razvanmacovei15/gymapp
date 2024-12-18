@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { usePopup } from "./PopupContext";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { z } from "zod";
@@ -10,7 +10,7 @@ import axios from "axios";
 type UploadStatus = "idle" | "uploading" | "success" | "error";
 
 const ProfileMenuPopup = () => {
-  const { authState } = useAuth();
+  const { authState, fetchProfilePhoto, profilePhoto } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for the hidden file input
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
@@ -29,34 +29,18 @@ const ProfileMenuPopup = () => {
     }
   }
 
-  async function fetchPreSignedUrl() {
-    try {
-      const result = await axios.get(
-        "http://maco-coding.go.ro:8010/minio/presignedUrl"
-      );
-      console.log(result);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   async function uploadFile() {
-    if (
-      !file
-      // || !bucketName || !objectName
-    )
-      return;
+    if (!file) return;
 
     setUploadStatus("uploading");
     setUploadProgress(0);
 
     const formData = new FormData();
     formData.append("file", file);
-    // formData.append("bucketName", bucketName);
-    // formData.append("objectName", objectName);
 
     try {
-      await axios.post(
+      // Upload the file to the server
+      const result = await axios.post(
         "http://maco-coding.go.ro:8010/minio/uploadFile",
         formData,
         {
@@ -71,9 +55,16 @@ const ProfileMenuPopup = () => {
           },
         }
       );
+
       setUploadStatus("success");
       setUploadProgress(100);
-    } catch {
+      console.log("File upload successful:", result.data);
+
+      // Fetch the updated profile photo
+      const updatedPhotoUrl = await fetchProfilePhoto();
+      console.log("Updated Photo URL:", updatedPhotoUrl);
+    } catch (error) {
+      console.error("File upload failed:", error);
       setUploadStatus("error");
       setUploadProgress(0);
     }
@@ -84,6 +75,10 @@ const ProfileMenuPopup = () => {
   });
 
   const { isProfileMenuOpen, toggleProfileMenu } = usePopup();
+
+  useEffect(() => {
+    fetchProfilePhoto();
+  }, []);
 
   if (!isProfileMenuOpen) return null;
 
@@ -109,7 +104,7 @@ const ProfileMenuPopup = () => {
                   alt="Selected Avatar"
                 />
               ) : (
-                <AvatarImage src="src/assets/shadcn.jpg" />
+                <AvatarImage src={profilePhoto} />
               )}
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>

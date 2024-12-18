@@ -15,7 +15,7 @@ import {
 import { usePopup } from "../popups/PopupContext";
 
 export function UserNav() {
-  const { authState, handleLogout } = useAuth();
+  const { authState, handleLogout, profilePhoto } = useAuth();
   const user = authState.currentUser;
 
   // Conditionally update user details if the user is an admin
@@ -24,12 +24,16 @@ export function UserNav() {
 
   const { toggleProfileMenu } = usePopup();
 
+  console.log("UserNav", profilePhoto);
+
+  useEffect(() => {}, [profilePhoto]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="relative h-8 w-8 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src="src\assets\shadcn.jpg" />
+            <AvatarImage src={profilePhoto} />
             <AvatarFallback>SC</AvatarFallback>
           </Avatar>
         </Button>

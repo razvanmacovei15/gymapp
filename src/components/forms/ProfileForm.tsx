@@ -37,8 +37,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
   });
 
   //TODO
-  async function changeProfilePicture() {}
-  //TODO
   async function updateUserInformation() {}
 
   // Handle form submission
@@ -46,7 +44,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
     console.log("Updated user data:", values);
     // You can send `values` to your server or handle them as needed
     // TODO 2 separate functions here one for updating the user information and one for changeing the profil picture independent from one another
-    changeProfilePicture();
     updateUserInformation();
   }
 
@@ -84,7 +81,19 @@ export function ProfileForm({ user }: ProfileFormProps) {
         />
 
         {/* Submit Button */}
-        <Button type="submit">Update user information</Button>
+        <div className="flex flex-row justify-end space-x-4 ">
+          <Button type="submit" className="bg-green-500">
+            Update user information
+          </Button>
+          <Button
+            onClick={() => {
+              console.log("Cancel button clicked");
+            }}
+            className="bg-red-500"
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
     </Form>
   );

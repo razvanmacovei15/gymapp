@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { User } from "./types/User";
+import { set } from "zod";
 
 type AuthContext = {
   authState: {
     authToken?: string | null;
     currentUser?: User | null;
-    preSignedUrl?: string;
   };
   handleLogin?: (email: string, password: string) => Promise<any>;
   handleLogout: () => Promise<any>;
@@ -17,6 +17,7 @@ type AuthContext = {
     password: string,
     role: string
   ) => Promise<any>;
+  fetchProfilePhoto: () => Promise<any>;
   profilePhoto: string;
 };
 
@@ -28,6 +29,8 @@ const AuthContext = createContext<AuthContext | undefined>(undefined);
 type AuthProviderProps = PropsWithChildren;
 
 export default function AuthProvider({ children }: AuthProviderProps) {
+  const [profilePhoto, setProfilePhoto] = useState<string>("");
+
   const [authState, setAuthState] = useState<{
     authToken: string | null;
     currentUser: User | null;
@@ -35,16 +38,17 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     authToken: localStorage.getItem(TOKEN_KEY),
     currentUser: null,
   });
-  const [profilePhoto, setProfilePhoto] = useState<string>("");
 
   async function fetchProfilePhoto() {
     try {
       const result = await axios.get(`${API_URL}/minio/generate-url`);
-      console.log(result.data);
+      console.log("Fetched Photo URL:", result.data);
+
       setProfilePhoto(result.data);
-      return result.data;
+
+      return result.data; // Return the updated URL
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching profile photo:", error);
     }
   }
 
@@ -62,7 +66,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         currentUser: result.data.user,
       });
 
-      console.log(authState.currentUser?.role);
+      console.log(authState.currentUser?.preSignedPhotoUrl);
 
       axios.defaults.headers.common[
         "Authorization"
@@ -140,6 +144,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     handleLogout,
     handleRegister,
     profilePhoto,
+    fetchProfilePhoto,
   };
 
   useEffect(() => {
@@ -149,9 +154,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         try {
           console.log("Token from localStorage:", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+          // Verify token and get user details
           const response = await axios.get(`${API_URL}/auth/me`);
           console.log("Token verification response:", response.data);
 
+          // Set user state
           setAuthState({
             authToken: token,
             currentUser: response.data.user,
