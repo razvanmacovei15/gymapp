@@ -43,15 +43,20 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     }
   };
 
-  const [subcategories, setSubcategories] = useState([]);
-  const fetchSubcategories = async () => {
-    try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/subcategory");
-      setSubcategories(response.data);
-    } catch (error) {
-      console.error("Failed to fetch subcategories:", error);
-    }
-  };
+const fetchManagersByGymIds = async (gymIds) => {
+  try {
+      const response = await axios.get('http://localhost:8080/getManagers', {
+          params: {
+              gymIds: gymIds, // Axios will serialize this as ?gymIds=402&gymIds=403&gymIds=3
+          },
+      });
+      console.log('Managers:', response.data);
+      return response.data; // Return the data for further processing
+  } catch (error) {
+      console.error('Error fetching managers:', error);
+      throw error; // Re-throw error for higher-level error handling
+  }
+};
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
