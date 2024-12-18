@@ -14,21 +14,27 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   const [users, setUsers] = useState([]);
   const [gyms, setGyms] = useState([]);
+  const [selectedGyms, setSelectedGyms] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isGymSelected, setIsGymSelected] = useState(false); // Track if a gym is selected
 
   const fetchManagersByGymIds = async (gymIds) => {
     try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/gyms/getManagers", {
-        params: {
-          gymIds: gymIds.map((gym) => gym.gymId), // Extract IDs from selected gyms
-        },
-      });
+      const response = await axios.post("http://maco-coding.go.ro:8010/gyms/getManagers", 
+       gymIds, 
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Response from server:", response.data);
       setUsers(response.data);
     } catch (error) {
-      console.error("Error fetching managers:", error);
+      console.error("Error fetching managers:", error.response || error.message);
     }
   };
+  
 
   const getGyms = async () => {
     try {
@@ -58,6 +64,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     setIsGymSelected(selectedList.length > 0); // Check if gyms are selected
     if (selectedList.length > 0) {
       const gymIds = selectedList.map((gym) => gym.id); // Extract gym IDs
+      console.log("Selected gym IDs:", gymIds);
       await fetchManagersByGymIds(gymIds); // Fetch managers
     } else {
       setUsers([]); // Reset users if no gym is selected
@@ -92,7 +99,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
   useEffect(() => {
     fetchCategories();
     getGyms();
-  }, []);
+  }, [gyms]);
 
   return (
     <div
@@ -133,7 +140,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               onSelect={handleSelectUsers}
               onRemove={handleSelectUsers}
               displayValue="name"
-              placeholder="Select Users"
+              placeholder={isGymSelected ? "Select Users" : "Select a Gym first"}
               className="w-full border rounded-lg shadow-sm"
               disable={!isGymSelected} // Disable if no gym is selected
             />
