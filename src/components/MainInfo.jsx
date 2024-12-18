@@ -109,7 +109,6 @@ export default function MainInfo() {
         fetchRolesData();
       }}>TASKS</h2>
 
-      </h2>
       {loading ? (
         <p className="text-white text-center">Loading tasks...</p>
       ) : error ? (
@@ -117,9 +116,7 @@ export default function MainInfo() {
       ) : (
         <div className="space-y-4">
           <TaskTable tasks={transformedTasks} loading={loading} error={error} />
-          <div>
-            <FileUploader />
-          </div>
+        
         </div>
       )}
 
