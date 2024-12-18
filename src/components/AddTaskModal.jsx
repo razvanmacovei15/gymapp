@@ -104,6 +104,22 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           Add New Task
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Gyms */}
+                    <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Gyms
+            </label>
+            <Multiselect
+              options={gyms}
+              selectedValues={formData.gyms}
+              onSelect={handleSelectGyms}
+              onRemove={handleSelectGyms}
+              displayValue="name"
+              placeholder="Select Gyms"
+              className="w-full border rounded-lg shadow-sm"
+            />
+          </div>
+          
           {/* Category */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -209,21 +225,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
             />
           </div>
 
-          {/* Gyms */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600 mb-2">
-              Gyms
-            </label>
-            <Multiselect
-              options={gyms}
-              selectedValues={formData.gyms}
-              onSelect={handleSelectGyms}
-              onRemove={handleSelectGyms}
-              displayValue="name"
-              placeholder="Select Gyms"
-              className="w-full border rounded-lg shadow-sm"
-            />
-          </div>
+
 
           {/* Submit Button */}
           <button
