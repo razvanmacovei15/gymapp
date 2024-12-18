@@ -41,7 +41,7 @@ const ProfileMenuPopup = () => {
     try {
       // Upload the file to the server
       const result = await axios.post(
-        "http://maco-coding.go.ro:8010/minio/uploadFile",
+        "http://maco-coding.go.ro:8010/api/users/uploadFile",
         formData,
         {
           headers: {
@@ -61,8 +61,7 @@ const ProfileMenuPopup = () => {
       console.log("File upload successful:", result.data);
 
       // Fetch the updated profile photo
-      const updatedPhotoUrl = await fetchProfilePhoto();
-      console.log("Updated Photo URL:", updatedPhotoUrl);
+      await fetchProfilePhoto();
     } catch (error) {
       console.error("File upload failed:", error);
       setUploadStatus("error");
