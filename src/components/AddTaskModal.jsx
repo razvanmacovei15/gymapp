@@ -57,7 +57,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     setFormData({ ...formData, gyms: selectedList });
     setIsGymSelected(selectedList.length > 0); // Check if gyms are selected
     if (selectedList.length > 0) {
-      const gymIds = selectedList.map((gym) => gym.gymId); // Extract gym IDs
+      const gymIds = selectedList.map((gym) => gym.id); // Extract gym IDs
       await fetchManagersByGymIds(gymIds); // Fetch managers
     } else {
       setUsers([]); // Reset users if no gym is selected
@@ -92,7 +92,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
   useEffect(() => {
     fetchCategories();
     getGyms();
-  }, [gyms]);
+  }, []);
 
   return (
     <div
