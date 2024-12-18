@@ -7,14 +7,13 @@ import UserProfile from "./UserProfile";
 import { UserNav } from "./top-bar/user-nav";
 
 export default function TopBar({ toggleSidebar }) {
-
   const [gyms, setGyms] = useState([]);
 
-  const getGyms = async() =>{
+  const getGyms = async () => {
     const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all");
-    const gymNames = response.data.map(gym => gym.name);
+    const gymNames = response.data.map((gym) => gym.name);
     return setGyms(gymNames);
-  } 
+  };
 
   const handleLocationChange = (newLocation) => {
     console.log("Selected location:", newLocation);
@@ -32,9 +31,8 @@ export default function TopBar({ toggleSidebar }) {
           locations={gyms}
           onLocationChange={handleLocationChange}
         />
-        <UserNav/>
+        <UserNav />
       </div>
-      
     </header>
   );
 }
