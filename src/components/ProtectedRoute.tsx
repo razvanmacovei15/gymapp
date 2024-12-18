@@ -5,6 +5,7 @@ import NoUserPage from "../pages/NoUserPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import { User } from "../components/types/User";
 
+
 type ProtectedRouteProps = PropsWithChildren & {
   allowedRoles: User["role"];
 };

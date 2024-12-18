@@ -3,6 +3,9 @@ import axios from "axios";
 import AddTaskModal from "./AddTaskModal";
 import { useAuth } from "./AuthProvider";
 import TaskTable from "./table/task-table";
+import FileUploader from "./file-uploader/FileUploader";
+import ProfileMenuPopup from "./popups/ProfileMenuPopup";
+import TaskViewPopup from "./popups/TaskViewPopup";
 
 export default function MainInfo() {
   const { authState } = useAuth();
@@ -18,12 +21,14 @@ export default function MainInfo() {
       setLoading(true);
 
       const config = {
-        headers: { Authorization: `Bearer ${authState.authToken}` }
+        headers: { Authorization: `Bearer ${authState.authToken}` },
       };
-      const response = await axios.get("http://maco-coding.go.ro:8010/tasks/all", config);
+      const response = await axios.get(
+        "http://maco-coding.go.ro:8010/tasks/all",
+        config
+      );
       setTasks(response.data);
       console.log("Tasks from API:", tasks);
-
     } catch (err) {
       console.error("Failed to fetch tasks:", err);
       setError("Failed to fetch tasks.");
@@ -37,9 +42,12 @@ export default function MainInfo() {
       setLoading(true);
 
       const config = {
-        headers: { Authorization: `Bearer ${authState.authToken}` }
+        headers: { Authorization: `Bearer ${authState.authToken}` },
       };
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/roles", config);
+      const response = await axios.get(
+        "http://maco-coding.go.ro:8010/api/enum/roles",
+        config
+      );
       console.log(response.data);
     } catch (err) {
       console.error("Failed to fetch roles:", err);
@@ -54,18 +62,20 @@ export default function MainInfo() {
       setLoading(true);
 
       const config = {
-        headers: { Authorization: `Bearer ${authState.authToken}` }
+        headers: { Authorization: `Bearer ${authState.authToken}` },
       };
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/taskStatus", config);
+      const response = await axios.get(
+        "http://maco-coding.go.ro:8010/api/enum/taskStatus",
+        config
+      );
       console.log("statuses: " + response.data);
     } catch (err) {
       console.error("Failed to fetch task statuses:", err);
       setError("Failed to fetch task statuses.");
     } finally {
       setLoading(false);
+    }
   };
-}
-  
 
   useEffect(() => {
     fetchTasksData();
@@ -78,7 +88,10 @@ export default function MainInfo() {
 
   const handleAddTask = async (newTask) => {
     try {
-      const response = await axios.post("http://maco-coding.go.ro:8010/tasks/create", newTask);
+      const response = await axios.post(
+        "http://maco-coding.go.ro:8010/tasks/create",
+        newTask
+      );
       console.log("Task added successfully:", response.data);
       fetchTasksData(); // Refresh task list
       toggleModal(); // Close modal
@@ -89,13 +102,14 @@ export default function MainInfo() {
 
   const transformedTasks = tasks.map((task) => ({ ...task.taskDTO }));
 
-
   return (
     <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full  p-4">
       <h2 className="text-5xl font-bold m-10 text-left ml-7 text-white" onClick={()=>{
         console.log(authState.authToken);
         fetchRolesData();
       }}>TASKS</h2>
+
+      </h2>
       {loading ? (
         <p className="text-white text-center">Loading tasks...</p>
       ) : error ? (
@@ -103,6 +117,9 @@ export default function MainInfo() {
       ) : (
         <div className="space-y-4">
           <TaskTable tasks={transformedTasks} loading={loading} error={error} />
+          <div>
+            <FileUploader />
+          </div>
         </div>
       )}
 
@@ -118,6 +135,8 @@ export default function MainInfo() {
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
+      <ProfileMenuPopup />
+      <TaskViewPopup />
     </div>
   );
 }

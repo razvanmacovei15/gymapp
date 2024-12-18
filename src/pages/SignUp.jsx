@@ -8,7 +8,6 @@ const SignUpPage = () => {
   const navigate = useNavigate();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,22 +26,26 @@ const SignUpPage = () => {
     }));
   };
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-  
+
     if (!formData.name || !formData.email || !formData.password) {
       alert("Please fill in all fields");
       return;
     }
-  
+
     setIsSubmitting(true);
-  
+
     formData.role = "ADMIN"; // Set the role to ADMIN by default
-  
+
     try {
       if (handleRegister) {
-        await handleRegister(formData.name, formData.email, formData.password, formData.role);
+        await handleRegister(
+          formData.name,
+          formData.email,
+          formData.password,
+          formData.role
+        );
         navigate("/login"); // Navigate to the login page after successful registration
       } else {
         alert("Register function not found");
@@ -54,7 +57,6 @@ const SignUpPage = () => {
       setIsSubmitting(false); // Properly reset the submitting state
     }
   };
-  
 
   return (
     <div className="signup-container">
@@ -63,6 +65,7 @@ const SignUpPage = () => {
         <form onSubmit={handleSubmit}>
         <div className="form-group">
             <label htmlFor="email" style={{ color: 'white' }}>Username</label>
+
             <input
               type="text"
               id="name"
@@ -139,7 +142,11 @@ const SignUpPage = () => {
             >
               {isSubmitting ? "Creating..." : "Create"}
             </button>
-            <button onClick={ ()=> navigate('/login')} type="button" className="signup-button">
+            <button
+              onClick={() => navigate("/login")}
+              type="button"
+              className="signup-button"
+            >
               Login
             </button>
           </div>

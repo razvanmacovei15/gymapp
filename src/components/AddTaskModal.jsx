@@ -4,26 +4,39 @@ import axios from "axios";
 
 export default function AddTaskModal({ onSubmit, onClose }) {
   const [formData, setFormData] = useState({
+    title: "",
     category: "",
     description: "",
     deadline: "",
     priority: "",
-    subcategory: "",
     gyms: [],
     users: [],
   });
 
   const [users, setUsers] = useState([]);
-  const getUsers = async () => {
+  const [gyms, setGyms] = useState([]);
+  const [selectedGyms, setSelectedGyms] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [isGymSelected, setIsGymSelected] = useState(false); // Track if a gym is selected
+
+  const fetchManagersByGymIds = async (gymIds) => {
     try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/users/managers");
+      const response = await axios.post("http://maco-coding.go.ro:8010/gyms/getManagers", 
+       gymIds, 
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Response from server:", response.data);
       setUsers(response.data);
     } catch (error) {
-      console.error("Failed to fetch users:", error);
+      console.error("Error fetching managers:", error.response || error.message);
     }
   };
+  
 
-  const [gyms, setGyms] = useState([]);
   const getGyms = async () => {
     try {
       const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all");
@@ -33,7 +46,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     }
   };
 
-  const [categories, setCategories] = useState([]);
   const fetchCategories = async () => {
     try {
       const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/category");
@@ -43,27 +55,29 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     }
   };
 
-  const [subcategories, setSubcategories] = useState([]);
-  const fetchSubcategories = async () => {
-    try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/subcategory");
-      setSubcategories(response.data);
-    } catch (error) {
-      console.error("Failed to fetch subcategories:", error);
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSelectUsers = (selectedList) => {
-    setFormData({ ...formData, users: selectedList });
+  const handleSelectGyms = async (selectedList) => {
+    setFormData({ ...formData, gyms: selectedList });
+    setIsGymSelected(selectedList.length > 0); // Check if gyms are selected
+    if (selectedList.length > 0) {
+      const gymIds = selectedList.map((gym) => gym.id); // Extract gym IDs
+      console.log("Selected gym IDs:", gymIds);
+      await fetchManagersByGymIds(gymIds); // Fetch managers
+    } else {
+      setUsers([]); // Reset users if no gym is selected
+    }
   };
 
-  const handleSelectGyms = (selectedList) => {
-    setFormData({ ...formData, gyms: selectedList });
+  const handleSelectUsers = (selectedList) => {
+    if (!isGymSelected) {
+      alert("Please select a gym first!");
+      return;
+    }
+    setFormData({ ...formData, users: selectedList });
   };
 
   const handleSubmit = (e) => {
@@ -71,11 +85,11 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
     const formattedData = {
       taskDTO: {
+        title: formData.title,
         category: formData.category,
         description: formData.description,
         deadline: formData.deadline,
         priority: formData.priority,
-        subcategory: formData.subcategory,
       },
       users: formData.users,
       gyms: formData.gyms,
@@ -86,10 +100,8 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   useEffect(() => {
     fetchCategories();
-    fetchSubcategories();
-    getUsers();
     getGyms();
-  }, []);
+  }, [gyms]);
 
   return (
     <div
@@ -104,6 +116,51 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           Add New Task
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
+           {/* Title */}
+           <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Title
+            </label>
+            <textarea
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+              placeholder="Enter task title..."
+              required
+            ></textarea>
+          </div>
+          {/* Gyms */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Gyms
+            </label>
+            <Multiselect
+              options={gyms}
+              selectedValues={formData.gyms}
+              onSelect={handleSelectGyms}
+              onRemove={handleSelectGyms}
+              displayValue="name"
+              placeholder="Select Gyms"
+              className="w-full border rounded-lg shadow-sm"
+            />
+          </div>
+          {/* Users */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Users
+            </label>
+            <Multiselect
+              options={users}
+              selectedValues={formData.users}
+              onSelect={handleSelectUsers}
+              onRemove={handleSelectUsers}
+              displayValue="name"
+              placeholder={isGymSelected ? "Select Users" : "Select a Gym first"}
+              className="w-full border rounded-lg shadow-sm"
+              disable={!isGymSelected} // Disable if no gym is selected
+            />
+          </div>
           {/* Category */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -124,28 +181,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               ))}
             </select>
           </div>
-
-          {/* Subcategory */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600 mb-2">
-              Subcategory
-            </label>
-            <select
-              name="subcategory"
-              value={formData.subcategory}
-              onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
-              required
-            >
-              <option value="">Select Subcategory</option>
-              {subcategories.map((subcat, index) => (
-                <option key={index} value={subcat}>
-                  {subcat}
-                </option>
-              ))}
-            </select>
-          </div>
-
           {/* Description */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -160,7 +195,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               required
             ></textarea>
           </div>
-
           {/* Deadline */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -175,7 +209,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               required
             />
           </div>
-
           {/* Priority */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -192,39 +225,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               <option value="Low">Low</option>
             </select>
           </div>
-
-          {/* Users */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600 mb-2">
-              Users
-            </label>
-            <Multiselect
-              options={users}
-              selectedValues={formData.users}
-              onSelect={handleSelectUsers}
-              onRemove={handleSelectUsers}
-              displayValue="name"
-              placeholder="Select Users"
-              className="w-full border rounded-lg shadow-sm"
-            />
-          </div>
-
-          {/* Gyms */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600 mb-2">
-              Gyms
-            </label>
-            <Multiselect
-              options={gyms}
-              selectedValues={formData.gyms}
-              onSelect={handleSelectGyms}
-              onRemove={handleSelectGyms}
-              displayValue="name"
-              placeholder="Select Gyms"
-              className="w-full border rounded-lg shadow-sm"
-            />
-          </div>
-
           {/* Submit Button */}
           <button
             type="submit"

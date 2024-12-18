@@ -1,7 +1,9 @@
 import MainInfo from "./MainInfo";
 import TopBar from "./TopBar";
+
 import { AppSidebar } from "./side-bar/app-sidebar"
 import { SidebarProvider } from "./ui/sidebar"; // Import SidebarProvider
+
 import { useState } from "react";
 
 export default function MainView() {
