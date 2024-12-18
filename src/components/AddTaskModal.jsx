@@ -104,8 +104,8 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           Add New Task
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Gyms */}
-                    <div>
+          {/* Gyms */}
+          <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
               Gyms
             </label>
@@ -119,7 +119,21 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               className="w-full border rounded-lg shadow-sm"
             />
           </div>
-          
+          {/* Users */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Users
+            </label>
+            <Multiselect
+              options={users}
+              selectedValues={formData.users}
+              onSelect={handleSelectUsers}
+              onRemove={handleSelectUsers}
+              displayValue="name"
+              placeholder="Select Users"
+              className="w-full border rounded-lg shadow-sm"
+            />
+          </div>
           {/* Category */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -140,28 +154,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               ))}
             </select>
           </div>
-
-          {/* Subcategory */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600 mb-2">
-              Subcategory
-            </label>
-            <select
-              name="subcategory"
-              value={formData.subcategory}
-              onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
-              required
-            >
-              <option value="">Select Subcategory</option>
-              {subcategories.map((subcat, index) => (
-                <option key={index} value={subcat}>
-                  {subcat}
-                </option>
-              ))}
-            </select>
-          </div>
-
           {/* Description */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -176,7 +168,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               required
             ></textarea>
           </div>
-
           {/* Deadline */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -191,7 +182,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               required
             />
           </div>
-
           {/* Priority */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
@@ -208,25 +198,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               <option value="Low">Low</option>
             </select>
           </div>
-
-          {/* Users */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600 mb-2">
-              Users
-            </label>
-            <Multiselect
-              options={users}
-              selectedValues={formData.users}
-              onSelect={handleSelectUsers}
-              onRemove={handleSelectUsers}
-              displayValue="name"
-              placeholder="Select Users"
-              className="w-full border rounded-lg shadow-sm"
-            />
-          </div>
-
-
-
           {/* Submit Button */}
           <button
             type="submit"
