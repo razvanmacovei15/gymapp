@@ -8,22 +8,28 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     description: "",
     deadline: "",
     priority: "",
-    subcategory: "",
     gyms: [],
     users: [],
   });
 
   const [users, setUsers] = useState([]);
-  const getUsers = async () => {
+  const [gyms, setGyms] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [isGymSelected, setIsGymSelected] = useState(false); // Track if a gym is selected
+
+  const fetchManagersByGymIds = async (gymIds) => {
     try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/users/managers");
+      const response = await axios.get("http://maco-coding.go.ro:8010/gyms/getManagers", {
+        params: {
+          gymIds: gymIds.map((gym) => gym.gymId), // Extract IDs from selected gyms
+        },
+      });
       setUsers(response.data);
     } catch (error) {
-      console.error("Failed to fetch users:", error);
+      console.error("Error fetching managers:", error);
     }
   };
 
-  const [gyms, setGyms] = useState([]);
   const getGyms = async () => {
     try {
       const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all");
@@ -33,7 +39,6 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     }
   };
 
-  const [categories, setCategories] = useState([]);
   const fetchCategories = async () => {
     try {
       const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/category");
@@ -43,32 +48,28 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     }
   };
 
-const fetchManagersByGymIds = async (gymIds) => {
-  try {
-      const response = await axios.get('http://localhost:8080/getManagers', {
-          params: {
-              gymIds: gymIds, // Axios will serialize this as ?gymIds=402&gymIds=403&gymIds=3
-          },
-      });
-      console.log('Managers:', response.data);
-      return response.data; // Return the data for further processing
-  } catch (error) {
-      console.error('Error fetching managers:', error);
-      throw error; // Re-throw error for higher-level error handling
-  }
-};
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSelectUsers = (selectedList) => {
-    setFormData({ ...formData, users: selectedList });
+  const handleSelectGyms = async (selectedList) => {
+    setFormData({ ...formData, gyms: selectedList });
+    setIsGymSelected(selectedList.length > 0); // Check if gyms are selected
+    if (selectedList.length > 0) {
+      const gymIds = selectedList.map((gym) => gym.gymId); // Extract gym IDs
+      await fetchManagersByGymIds(gymIds); // Fetch managers
+    } else {
+      setUsers([]); // Reset users if no gym is selected
+    }
   };
 
-  const handleSelectGyms = (selectedList) => {
-    setFormData({ ...formData, gyms: selectedList });
+  const handleSelectUsers = (selectedList) => {
+    if (!isGymSelected) {
+      alert("Please select a gym first!");
+      return;
+    }
+    setFormData({ ...formData, users: selectedList });
   };
 
   const handleSubmit = (e) => {
@@ -80,7 +81,6 @@ const fetchManagersByGymIds = async (gymIds) => {
         description: formData.description,
         deadline: formData.deadline,
         priority: formData.priority,
-        subcategory: formData.subcategory,
       },
       users: formData.users,
       gyms: formData.gyms,
@@ -91,10 +91,8 @@ const fetchManagersByGymIds = async (gymIds) => {
 
   useEffect(() => {
     fetchCategories();
-    fetchSubcategories();
-    getUsers();
     getGyms();
-  }, []);
+  }, [gyms]);
 
   return (
     <div
@@ -137,6 +135,7 @@ const fetchManagersByGymIds = async (gymIds) => {
               displayValue="name"
               placeholder="Select Users"
               className="w-full border rounded-lg shadow-sm"
+              disable={!isGymSelected} // Disable if no gym is selected
             />
           </div>
           {/* Category */}
