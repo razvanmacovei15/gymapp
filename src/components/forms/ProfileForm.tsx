@@ -24,9 +24,10 @@ const formSchema = z.object({
 
 interface ProfileFormProps {
   user: User;
+  toggleProfileMenu: () => void;
 }
 
-export function ProfileForm({ user }: ProfileFormProps) {
+export function ProfileForm({ user, toggleProfileMenu }: ProfileFormProps) {
   // Initialize the form with user's information as default values
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -85,12 +86,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
           <Button type="submit" className="bg-green-500">
             Update user information
           </Button>
-          <Button
-            onClick={() => {
-              console.log("Cancel button clicked");
-            }}
-            className="bg-red-500"
-          >
+          <Button onClick={toggleProfileMenu} className="bg-red-500">
             Cancel
           </Button>
         </div>
