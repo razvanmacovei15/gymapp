@@ -44,7 +44,9 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Title" />
+    ),
   },
   {
     accessorKey: "gyms",
@@ -53,7 +55,7 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "managersResponsible",
-    header: "Managers Responsible",
+    header: "Asignees",
     cell: ({ row }) => row.original.users.map((user) => user.name).join(", "), // Access data via `row.original`
   },
   {

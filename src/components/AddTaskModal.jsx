@@ -4,6 +4,7 @@ import axios from "axios";
 
 export default function AddTaskModal({ onSubmit, onClose }) {
   const [formData, setFormData] = useState({
+    title: "",
     category: "",
     description: "",
     deadline: "",
@@ -84,6 +85,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
     const formattedData = {
       taskDTO: {
+        title: formData.title,
         category: formData.category,
         description: formData.description,
         deadline: formData.deadline,
@@ -114,6 +116,20 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           Add New Task
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
+           {/* Title */}
+           <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Title
+            </label>
+            <textarea
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+              placeholder="Enter task title..."
+              required
+            ></textarea>
+          </div>
           {/* Gyms */}
           <div>
             <label className="block text-sm font-semibold text-gray-600 mb-2">
