@@ -109,7 +109,6 @@ export default function MainInfo() {
         fetchRolesData();
       }}>TASKS</h2>
 
-      </h2>
       {loading ? (
         <p className="text-white text-center">Loading tasks...</p>
       ) : error ? (
