@@ -116,9 +116,7 @@ export default function MainInfo() {
       ) : (
         <div className="space-y-4">
           <TaskTable tasks={transformedTasks} loading={loading} error={error} />
-          <div>
-            <FileUploader />
-          </div>
+        
         </div>
       )}
 
