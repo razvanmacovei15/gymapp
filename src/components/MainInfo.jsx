@@ -104,14 +104,11 @@ export default function MainInfo() {
 
   return (
     <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full  p-4">
-      <h2
-        className="text-5xl font-bold m-10 text-left text-white ml-7"
-        onClick={() => {
-          console.log(authState.authToken);
-          fetchRolesData();
-        }}
-      >
-        TASKS
+      <h2 className="text-5xl font-bold m-10 text-left ml-7 text-white" onClick={()=>{
+        console.log(authState.authToken);
+        fetchRolesData();
+      }}>TASKS</h2>
+
       </h2>
       {loading ? (
         <p className="text-white text-center">Loading tasks...</p>

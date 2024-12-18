@@ -3,7 +3,8 @@ import { useAuth } from "./AuthProvider";
 import React from "react";
 import NoUserPage from "../pages/NoUserPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
-import { User } from "./types/User";
+import { User } from "../components/types/User";
+
 
 type ProtectedRouteProps = PropsWithChildren & {
   allowedRoles: User["role"];

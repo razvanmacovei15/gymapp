@@ -1,29 +1,31 @@
 import MainInfo from "./MainInfo";
 import TopBar from "./TopBar";
-import Sidebar from "./sidebar";
+
+import { AppSidebar } from "./side-bar/app-sidebar"
+import { SidebarProvider } from "./ui/sidebar"; // Import SidebarProvider
+
 import { useState } from "react";
 
 export default function MainView() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Toggle Sidebar visibility
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="flex grow h-full">
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} />
+    <SidebarProvider defaultOpen={isSidebarOpen}>
+      <div className="flex grow h-full">
+        {/* AppSidebar */}
+        <AppSidebar />
 
-      {/* Main Content */}
-      <div
-        className={`flex flex-col grow transition-all duration-300 ${
-          isSidebarOpen ? "ml-[250px]" : "ml-0"
-        }`}
-      >
-        <TopBar toggleSidebar={toggleSidebar} />{" "}
-        {/* Pass toggle function to TopBar */}
-        <MainInfo />
+        {/* Main Content */}
+        <div
+          className={`flex flex-col grow transition-all duration-300 `}
+        >
+          <TopBar toggleSidebar={toggleSidebar} /> {/* Pass toggle function to TopBar */}
+          <MainInfo />
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

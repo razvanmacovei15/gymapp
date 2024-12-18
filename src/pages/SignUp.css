@@ -5,13 +5,13 @@
     align-items: center;
     height: 100vh; /* Full viewport height */
     width: 100vw; /* Full viewport width */
-    background-color: #a9b1c7; /* Light background color */
+    background: linear-gradient(to bottom, #0f0f0f, #831843);/* Light background color */
     margin: 0;
   }
   
   /* Sign-up box styling */
   .signup-box {
-    background-color: #d0d5df;
+    background-color: #000000;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -30,9 +30,9 @@
     width: 100%;
     padding: 10px;
     margin-top: 5px;
-    border: 1px solid #000033;
+    border: 1px solid #1e1e1e;
     border-radius: 5px;
-    background-color: #000033;
+    background-color: #1e1e1e;
     color: white;
     font-size: 16px;
     outline: none;
@@ -40,8 +40,8 @@
   
   /* Focus state for input fields */
   .input-field:focus {
-    border-color: #5a9bd6;
-    box-shadow: 0 0 5px rgba(90, 155, 214, 0.5);
+    border-color: #791547;
+    box-shadow: 0 0 5px rgba(42, 42, 42, 0.5);
   }
   
   /* Password wrapper for visibility toggle */
@@ -75,7 +75,7 @@
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    background-color: #000033;
+    background-color: #1e1e1e;
     color: white;
     font-size: 16px;
     width: 48%; /* To make the buttons side-by-side */
@@ -83,6 +83,6 @@
   }
   
   .signup-button:hover {
-    background-color: #5a9bd6;
+    background-color: #531632;
   }
   
