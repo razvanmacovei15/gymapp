@@ -147,7 +147,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     fetchProfilePhoto,
   };
 
-/*   useEffect(() => {
+   useEffect(() => {
     const initializeAuth = async () => {
       const token = localStorage.getItem(TOKEN_KEY);
       if (token) {
@@ -175,7 +175,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     initializeAuth();
   }, []);
- */
+ 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
