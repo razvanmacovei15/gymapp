@@ -8,7 +8,7 @@ type MiniAttachmentCardProps = {
 
 const MiniAttachmentCard = ({ file }: MiniAttachmentCardProps) => {
   return (
-    <div className="flex flex-row flex-wrap w-4/5 gap-2 items-center justify-center">
+    <div className="flex flex-row flex-wrap w-28 gap-2 items-center justify-center">
       <FileCode2 className="w-14 h-14 text-gray-500" />
       <div className="flex flex-col items-center justify-center">
         <p className="text-xs align-middle text-center p-1">Filename.png</p>

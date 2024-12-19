@@ -132,6 +132,7 @@ export default function MainInfo() {
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
+      <FileUploader/>
       <ProfileMenuPopup />
       <TaskViewPopup task={openedTask} />
     </div>
