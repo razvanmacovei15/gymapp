@@ -48,7 +48,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/category");
+      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/categories");
       setCategories(response.data);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
@@ -101,7 +101,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
   useEffect(() => {
     fetchCategories();
     getGyms();
-  }, [gyms]);
+  }, []);
 
   return (
     <div
