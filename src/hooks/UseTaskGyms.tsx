@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Gym } from "../components/types/Gym";
 
@@ -14,12 +14,13 @@ export const useGyms = (initialTaskGyms: Gym[] = []) => {
   const [taskGyms, setTaskGyms] = useState<Gym[]>(initialTaskGyms);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const memoizedInitialTaskGyms = useMemo(() => initialTaskGyms, [initialTaskGyms]);
+
   const fetchGyms = async () => {
     try {
       setLoading(true);
       const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all");
       setGyms(response.data);
-      setItemsArray(response.data);
     } catch (error) {
       console.error("Failed to fetch gyms:", error);
     } finally {
@@ -31,7 +32,7 @@ export const useGyms = (initialTaskGyms: Gym[] = []) => {
     const itemsArray = gyms.map((gym) => ({
       id: gym.id,
       gym,
-      checked: initialTaskGyms.some((taskGym) => taskGym.id === gym.id),
+      checked: memoizedInitialTaskGyms.some((taskGym) => taskGym.id === gym.id),
     }));
     setItems(itemsArray);
   };
@@ -52,11 +53,11 @@ export const useGyms = (initialTaskGyms: Gym[] = []) => {
 
   useEffect(() => {
     fetchGyms();
-  }, []);
+  }, []); // Fetch gyms once on mount
 
   useEffect(() => {
-    setItemsArray(gyms);
-  }, [gyms, initialTaskGyms]);
+    // setItemsArray(gyms);
+  }, [gyms, memoizedInitialTaskGyms]); // Update items only when gyms or initialTaskGyms change
 
   return { gyms, setItems, items, taskGyms, setTaskGyms, loading, handleCheckedChange };
 };

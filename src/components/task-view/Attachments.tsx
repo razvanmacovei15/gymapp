@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Button } from "../ui/button";
 import MiniAttachmentCard from "./MiniAttachmentCard";
+import axios from "axios";
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
 
@@ -9,8 +10,8 @@ export const Attachments = () => {
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [bucketName, setBucketName] = useState<string>(""); // New state for bucket name
-  const [objectName, setObjectName] = useState<string>(""); // New state for object name
+  const [bucketName, setBucketName] = useState<string>("test-files"); // New state for bucket name
+  const [objectName, setObjectName] = useState<string>("test-file"); // New state for object name
 
   const handleAddFileClick = () => {
     if (fileInputRef.current) {
@@ -18,29 +19,37 @@ export const Attachments = () => {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      console.log("Selected files:", Array.from(files));
-      // Add further logic to process the files here
-      uploadFile();
+      const selectedFile = files[0];
+      setFile(selectedFile); // Set the file state
+      console.log("Selected file:", selectedFile);
+  
+      // Start the upload after setting the file
+      await uploadFile(selectedFile);
     }
   };
+  
 
-  async function uploadFile() {
-    if (!file || !bucketName || !objectName) return;
-
+  async function uploadFile(selectedFile: File) {
+    if (!selectedFile || !bucketName || !objectName) return;
+  
     setUploadStatus("uploading");
     setUploadProgress(0);
-
+  
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", selectedFile);
     formData.append("bucketName", bucketName);
     formData.append("objectName", objectName);
-
+  
+    console.log("Uploading file:", selectedFile);
+    console.log("Bucket name:", bucketName);
+    console.log("Object name:", objectName);
+  
     try {
       await axios.post(
-        "http://maco-coding.go.ro:8010/minio/uploadFile",
+        "http://maco-coding.go.ro:8010/minio/upload",
         formData,
         {
           headers: {
@@ -61,7 +70,7 @@ export const Attachments = () => {
       setUploadProgress(0);
     }
   }
-
+  
   return (
     <div className="flex flex-col items-start gap-4">
       <p className="w-1/5 text-gray-500">Attachments</p>
@@ -85,6 +94,27 @@ export const Attachments = () => {
           multiple // Allows selecting multiple files (optional)
         />
       </div>
+      {uploadStatus === "uploading" && (
+        <div className="space-y-4">
+          <div className="h-2.5 bg-gray-200 rounded-full w-full">
+            <div
+              className="h-2.5 rounded-full bg-green-500 transition-all duration-300"
+              style={{ width: `${uploadProgress}%` }}
+            ></div>
+          </div>
+          <p className="text-sm text-gray-600">{uploadProgress}% upload</p>
+        </div>
+      )}
+      {file && uploadStatus !== "uploading" && (
+        <>
+          {uploadStatus === "success" && (
+            <p className="text-green-500">File uploaded successfully!</p>
+          )}
+          {uploadStatus === "error" && (
+            <p className="text-red-500">Error uploading file!</p>
+          )}
+        </>
+      )}
       
     </div>
   );
