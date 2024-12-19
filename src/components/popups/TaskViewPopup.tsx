@@ -221,7 +221,7 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
           )}
           <Check
             className={`w-10 h-10 rounded-full ml-2 p-1 ${
-              task.status === "done" ? "bg-green-400" : "bg-yellow-400"
+              task.status === "DONE" ? "bg-green-400" : "bg-yellow-400"
             }`}
           />
         </div>
