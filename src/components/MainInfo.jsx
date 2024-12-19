@@ -6,6 +6,7 @@ import TaskTable from "./table/task-table";
 import FileUploader from "./file-uploader/FileUploader";
 import ProfileMenuPopup from "./popups/ProfileMenuPopup";
 import TaskViewPopup from "./popups/TaskViewPopup";
+import { usePopup } from "./popups/PopupContext";
 
 export default function MainInfo() {
   const { authState } = useAuth();
@@ -14,6 +15,8 @@ export default function MainInfo() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { openedTask } = usePopup();
 
   // Fetch tasks from API
   const fetchTasksData = async () => {
@@ -28,7 +31,7 @@ export default function MainInfo() {
         config
       );
       setTasks(response.data);
-      console.log("Tasks from API:", tasks);
+      console.log("Tasks from API:", response.data);
     } catch (err) {
       console.error("Failed to fetch tasks:", err);
       setError("Failed to fetch tasks.");
@@ -48,7 +51,6 @@ export default function MainInfo() {
         "http://maco-coding.go.ro:8010/api/enum/roles",
         config
       );
-      console.log(response.data);
     } catch (err) {
       console.error("Failed to fetch roles:", err);
       setError("Failed to fetch roles.");
@@ -65,10 +67,9 @@ export default function MainInfo() {
         headers: { Authorization: `Bearer ${authState.authToken}` },
       };
       const response = await axios.get(
-        "http://maco-coding.go.ro:8010/api/enum/taskStatus",
+        "http://maco-coding.go.ro:8010/api/enum/statuses",
         config
       );
-      console.log("statuses: " + response.data);
     } catch (err) {
       console.error("Failed to fetch task statuses:", err);
       setError("Failed to fetch task statuses.");
@@ -79,7 +80,6 @@ export default function MainInfo() {
 
   useEffect(() => {
     fetchTasksData();
-    fetchTaskStatuses();
   }, []);
 
   const toggleModal = () => {
@@ -133,7 +133,7 @@ export default function MainInfo() {
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
       <ProfileMenuPopup />
-      <TaskViewPopup />
+      <TaskViewPopup task={openedTask} />
     </div>
   );
 }

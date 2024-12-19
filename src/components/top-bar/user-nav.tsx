@@ -24,10 +24,6 @@ export function UserNav() {
 
   const { toggleProfileMenu } = usePopup();
 
-  console.log("UserNav", profilePhoto);
-
-  useEffect(() => {}, [profilePhoto]);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

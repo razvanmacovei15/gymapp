@@ -85,7 +85,8 @@ export const columns: ColumnDef<Task>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const task = row.original;
+      const task = row.original; // Access the task data from the row
+
       const { toggleTaskView } = usePopup();
 
       return (
@@ -97,8 +98,8 @@ export const columns: ColumnDef<Task>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={toggleTaskView}>
+            <DropdownMenuLabel>Task-{task.taskId}</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => toggleTaskView(task)}>
               View task details
             </DropdownMenuItem>
             <DropdownMenuSeparator />

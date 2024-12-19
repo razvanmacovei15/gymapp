@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { Task } from "../types/Task";
 
 // Define the context type
 interface PopupContextType {
   isProfileMenuOpen: boolean;
   isTaskViewOpen: boolean;
+  openedTask: Task | null; // Track the currently open task ID
   toggleProfileMenu: () => void;
-  toggleTaskView: () => void;
+  toggleTaskView: (task: Task) => void; // Accept a task ID
   closeAllPopups: () => void;
 }
 
@@ -15,13 +17,30 @@ const PopupContext = createContext<PopupContextType | undefined>(undefined);
 // Create a provider component
 export const PopupProvider = ({ children }: { children: ReactNode }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [isTaskViewOpen, setIsTaskViewOpen] = useState(false);
-
   const toggleProfileMenu = () => setIsProfileMenuOpen((prev) => !prev);
-  const toggleTaskView = () => setIsTaskViewOpen((prev) => !prev);
+
+  const [isTaskViewOpen, setIsTaskViewOpen] = useState(false);
+  const [task, setTask] = useState<Task | null>(null);
+
+  const toggleTaskView = (toggledTask: Task) => {
+    if (task === toggledTask && isTaskViewOpen) {
+      // If the same task is already open, close it
+      setIsTaskViewOpen(false);
+      setTask(null);
+    } else {
+      // Open a new task or toggle to a different one
+      setIsTaskViewOpen(true);
+      setTask(toggledTask);
+    }
+  };
+
+  console.log("isTaskViewOpen:", isTaskViewOpen);
+  console.log("task:", task?.title);
+
   const closeAllPopups = () => {
     setIsProfileMenuOpen(false);
     setIsTaskViewOpen(false);
+    setTask(null);
   };
 
   return (
@@ -29,6 +48,7 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isProfileMenuOpen,
         isTaskViewOpen,
+        openedTask: task,
         toggleProfileMenu,
         toggleTaskView,
         closeAllPopups,
