@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { Gym } from "../components/types/Gym";
 
@@ -8,69 +8,66 @@ type Item = {
   checked: boolean;
 };
 
-export const useGyms = (initialTaskGyms: Gym[] = []) => {
-  const [gyms, setGyms] = useState<Gym[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [taskGyms, setTaskGyms] = useState<Gym[]>(initialTaskGyms);
+export const useGymItems = (initialTaskGyms: Gym[]) => {
+  // State to store the total gyms fetched from the API
+  const [totalGyms, setTotalGyms] = useState<Gym[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const memoizedInitialTaskGyms = useMemo(
-    () => initialTaskGyms,
-    [initialTaskGyms]
-  );
+  // State to track the task gyms (selected gyms)
+  const [taskGyms, setTaskGyms] = useState<Gym[]>(initialTaskGyms);
 
-  const fetchGyms = async () => {
-    try {
+  // Fetch gyms from the API when the hook is first used
+  useEffect(() => {
+    const fetchGyms = async () => {
       setLoading(true);
-      const response = await axios.get(
-        "http://maco-coding.go.ro:8010/gyms/all"
-      );
-      setGyms(response.data);
-    } catch (error) {
-      console.error("Failed to fetch gyms:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      setError(null); // Reset error state before fetching
+      try {
+        const response = await axios.get(
+          "http://maco-coding.go.ro:8010/gyms/all"
+        );
+        setTotalGyms(response.data); // Save fetched gyms to state
+      } catch (err) {
+        setError("Failed to fetch gyms"); // Set error if fetch fails
+        console.error(err);
+      } finally {
+        setLoading(false); // Turn off loading state
+      }
+    };
 
-  const setItemsArray = (gyms: Gym[]) => {
-    const itemsArray = gyms.map((gym) => ({
-      id: gym.id,
-      gym,
-      checked: memoizedInitialTaskGyms.some((taskGym) => taskGym.id === gym.id),
+    fetchGyms();
+  }, []);
+
+  // Generate the items array with `checked` status based on the `taskGyms` array
+  const items: Item[] = useMemo(() => {
+    return totalGyms.map((gym) => ({
+      id: gym.id, // Unique gym ID
+      gym, // The gym object
+      checked: taskGyms.some((taskGym) => taskGym.id === gym.id), // Checked if the gym is in taskGyms
     }));
-    setItems(itemsArray);
-  };
+  }, [totalGyms, taskGyms]);
 
+  // Handle toggling the `checked` property for a gym
   const handleCheckedChange = (id: number, checked: boolean) => {
-    setItems((prevItems) =>
-      prevItems.map((item) => (item.id === id ? { ...item, checked } : item))
-    );
+    const selectedGym = totalGyms.find((gym) => gym.id === id);
 
-    const selectedGym = gyms.find((gym) => gym.id === id);
     if (selectedGym) {
-      const updatedGyms = checked
+      // Add or remove the gym from the taskGyms array based on `checked`
+      const updatedTaskGyms = checked
         ? [...taskGyms, selectedGym] // Add gym if checked
         : taskGyms.filter((gym) => gym.id !== id); // Remove gym if unchecked
-      setTaskGyms(updatedGyms);
+
+      setTaskGyms(updatedTaskGyms); // Update the taskGyms state
     }
   };
 
-  useEffect(() => {
-    fetchGyms();
-  }, []); // Fetch gyms once on mount
-
-  useEffect(() => {
-    // setItemsArray(gyms);
-  }, [gyms, memoizedInitialTaskGyms]); // Update items only when gyms or initialTaskGyms change
-
+  // Return the hook API
   return {
-    gyms,
-    setItems,
-    items,
-    taskGyms,
-    setTaskGyms,
-    loading,
-    handleCheckedChange,
+    items, // The processed array with `checked` state
+    taskGyms, // Current selected gyms
+    setTaskGyms, // Setter for the selected gyms
+    handleCheckedChange, // Function to toggle `checked`
+    loading, // Loading state
+    error, // Error state if fetching fails
   };
 };

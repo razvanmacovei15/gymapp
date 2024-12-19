@@ -8,8 +8,8 @@ import { Badge } from "../ui/badge";
 import { useAuth } from "../AuthProvider";
 import { CiEdit } from "react-icons/ci";
 import { Gym } from "../types/Gym";
-import {Check } from "lucide-react";
-import { useGyms } from "@/hooks/UseTaskGyms";
+import { Check } from "lucide-react";
+import { useGymItems } from "@/hooks/UseTaskGyms";
 import { useTaskStatuses } from "@/hooks/UseTaskStatuses";
 import { useTaskCategories } from "@/hooks/UseTaskCategories";
 import { Attachments } from "../task-view/Attachments";
@@ -21,67 +21,62 @@ import { DueDate } from "../task-view/DueDate";
 import { Gyms } from "../task-view/Gyms";
 import { Asignees } from "../task-view/Asignees";
 import { EditableTitle } from "../task-view/EditableTitle";
+import { set } from "date-fns";
 
 type TaskViewPopupProps = {
   task?: Task;
 };
 
-type Item = {
-  id: number;
-  gym: Gym;
-  checked: boolean;
-};
-
 const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
-  // Use the custom hook for gyms
-  const { items, setItems, taskGyms,  setTaskGyms, loading, handleCheckedChange } = useGyms(
-    task?.gyms || []
-  );
-  const {statuses} = useTaskStatuses();
-  const {categories } = useTaskCategories();
+  const { statuses } = useTaskStatuses();
+  const { categories } = useTaskCategories();
 
   const { isTaskViewOpen, openedTask, toggleTaskView } = usePopup();
   const [deadline, setDeadline] = useState(task?.deadline || "");
   const [description, setDescription] = useState(task?.description || "");
-
-  const [isEditingTitle, setIsEditingTitle] = useState(false); // Track edit mode
-  const [editableTitle, setEditableTitle] = useState(task?.title || ""); // Editable title
-
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editableTitle, setEditableTitle] = useState(task?.title || "");
   const [taskStatus, setTaskStatus] = useState(task?.status || "");
   const [taskCategory, setCategory] = useState(task?.category || "");
-
-  //mark the item as checked that are also in the task.gyms array
-  useEffect(() => {
-    if (task) {
-      const itemsArray = items.map((item) => ({
-        ...item,
-        checked: task.gyms.some((gym) => gym.id === item.id),
-      }));
-      setItems(itemsArray);
-      setTaskGyms(task.gyms);
-    }
-  }, [task]);
+  const [updatedGyms, setUpdatedGyms] = useState<Gym[]>(task?.gyms || []); // Track updated gyms
 
   useEffect(() => {
-    // Update the status whenever the task changes
     if (task?.status) {
       setTaskStatus(task.status);
     }
   }, [task?.status]);
 
   useEffect(() => {
-    // Update the category whenever the task changes
     if (task?.category) {
       setCategory(task.category);
     }
   }, [task?.category]);
 
   useEffect(() => {
-    // Update the editable title whenever the task changes
     if (task?.title) {
       setEditableTitle(task.title);
     }
   }, [task?.title]);
+
+  const handleSave = async () => {
+    if (!task) return;
+
+    const updatedTask = {
+      ...task,
+      title: editableTitle,
+      description,
+      deadline,
+      status: taskStatus,
+      category: taskCategory,
+      gyms: updatedGyms,
+    };
+
+    try {
+      console.log("Saving task:", updatedTask);
+    } catch (error) {
+      console.error("Error saving task:", error);
+    }
+  };
 
   if (!isTaskViewOpen || !task || openedTask?.taskId !== task.taskId)
     return null;
@@ -95,7 +90,13 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
         className=" bg-white border border-gray-300 rounded-2xl p-10 z-[1000] w-4/6 flex flex-col gap-2"
         onClick={(e) => e.stopPropagation()}
       >
-        <EditableTitle task={task} isEditingTitle={isEditingTitle} setIsEditingTitle={setIsEditingTitle} setEditableTitle={setEditableTitle} editableTitle={editableTitle} />
+        <EditableTitle
+          task={task}
+          isEditingTitle={isEditingTitle}
+          setIsEditingTitle={setIsEditingTitle}
+          setEditableTitle={setEditableTitle}
+          editableTitle={editableTitle}
+        />
         <div className="flex flex-row items-center py-1">
           <p className="text-gray-500 pr-2">Priority:</p>
           <Badge>
@@ -104,18 +105,32 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
         </div>
         <Divider className="bg-gray-200 h-0.5" />
         <div className="gap-2 flex flex-col">
-          <Gyms taskGyms={taskGyms} loading={loading} items={items} handleCheckedChange={handleCheckedChange}/>
-          <Asignees task={task} />  
-          <DueDate task={task} setDeadline={setDeadline} />   
-          <Status statuses={statuses} taskStatus={taskStatus} setTaskStatus={setTaskStatus}/>
-          <Categeories categories={categories} taskCategory={taskCategory} setCategory={setCategory} />
+          <Gyms
+            initialTaskGyms={task?.gyms || []}
+            onGymsChange={setUpdatedGyms}
+          />
+          <Asignees task={task} />
+          <DueDate task={task} setDeadline={setDeadline} />
+          <Status
+            statuses={statuses}
+            taskStatus={taskStatus}
+            setTaskStatus={setTaskStatus}
+          />
+          <Categeories
+            categories={categories}
+            taskCategory={taskCategory}
+            setCategory={setCategory}
+          />
           <CreatedBy />
           <Description task={task} setDescription={setDescription} />
         </div>
-        <Divider className="bg-gray-200 h-0.5"/>
+        <Divider className="bg-gray-200 h-0.5" />
         <Attachments />
         <div className="flex flex-row justify-between items-center gap-2 pt-8">
-          <Button className="w-full bg-green-500 text-white rounded-md">
+          <Button
+            onClick={handleSave} // Save task with updated data
+            className="w-full bg-green-500 text-white rounded-md"
+          >
             <span>Save</span>
           </Button>
           <Button
