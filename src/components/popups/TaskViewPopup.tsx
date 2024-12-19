@@ -26,7 +26,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { CiEdit } from "react-icons/ci";
 import { get } from "react-hook-form";
 import { Gym } from "../types/Gym";
-import { File, Image, FilePenLine, FileCode2 } from "lucide-react";
+import { File, Image, FilePenLine, FileCode2, Check } from "lucide-react";
 import MiniAttachmentCard from "../task-view/MiniAttachmentCard";
 
 type TaskViewPopupProps = {
@@ -186,7 +186,7 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
             Task-{task?.taskId}:
           </h2>
           {isEditingTitle ? (
-            <div className="flex items-center grow gap-2">
+            <div className="flex items-center grow gap-2 w-7/8">
               <input
                 type="text"
                 value={editableTitle}
@@ -219,6 +219,11 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
               </Button>
             </h2>
           )}
+          <Check
+            className={`w-10 h-10 rounded-full ml-2 p-1 ${
+              task.status === "done" ? "bg-green-400" : "bg-yellow-400"
+            }`}
+          />
         </div>
         <div className="flex flex-row items-center py-1">
           <p className="text-gray-500 pr-2">Priority:</p>
