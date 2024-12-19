@@ -19,50 +19,47 @@ export const Attachments = () => {
     }
   };
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const selectedFile = files[0];
       setFile(selectedFile); // Set the file state
       console.log("Selected file:", selectedFile);
-  
+
       // Start the upload after setting the file
       await uploadFile(selectedFile);
     }
   };
-  
 
   async function uploadFile(selectedFile: File) {
     if (!selectedFile || !bucketName || !objectName) return;
-  
+
     setUploadStatus("uploading");
     setUploadProgress(0);
-  
+
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("bucketName", bucketName);
     formData.append("objectName", objectName);
-  
+
     console.log("Uploading file:", selectedFile);
     console.log("Bucket name:", bucketName);
     console.log("Object name:", objectName);
-  
+
     try {
-      await axios.post(
-        "http://maco-coding.go.ro:8010/minio/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = progressEvent.total
-              ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
-              : 0;
-            setUploadProgress(progress);
-          },
-        }
-      );
+      await axios.post("http://maco-coding.go.ro:8010/minio/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = progressEvent.total
+            ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            : 0;
+          setUploadProgress(progress);
+        },
+      });
       setUploadStatus("success");
       setUploadProgress(100);
     } catch {
@@ -70,7 +67,7 @@ export const Attachments = () => {
       setUploadProgress(0);
     }
   }
-  
+
   return (
     <div className="flex flex-col items-start gap-4">
       <p className="w-1/5 text-gray-500">Attachments</p>
@@ -81,7 +78,7 @@ export const Attachments = () => {
         <Button
           variant="outline"
           onClick={handleAddFileClick}
-          className="cursor-pointer rounded-full bg-slate-200 w-8 h-8 flex items-center justify-center text-2xl"
+          className="cursor-pointer rounded-full pb-3 bg-slate-200 w-8 h-8 flex text-2xl"
         >
           +
         </Button>
@@ -95,7 +92,7 @@ export const Attachments = () => {
         />
       </div>
       {uploadStatus === "uploading" && (
-        <div className="space-y-4">
+        <div className="space-y-4 w-full px-5">
           <div className="h-2.5 bg-gray-200 rounded-full w-full">
             <div
               className="h-2.5 rounded-full bg-green-500 transition-all duration-300"
@@ -108,14 +105,13 @@ export const Attachments = () => {
       {file && uploadStatus !== "uploading" && (
         <>
           {uploadStatus === "success" && (
-            <p className="text-green-500">File uploaded successfully!</p>
+            <p className="text-green-500 px-5">File uploaded successfully!</p>
           )}
           {uploadStatus === "error" && (
             <p className="text-red-500">Error uploading file!</p>
           )}
         </>
       )}
-      
     </div>
   );
 };
