@@ -12,39 +12,39 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-// Menu items.
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/dashboard",
     icon: LayoutDashboard,
   },
   {
     title: "Tasks",
-    url: "#",
+    url: "/tasks",
     icon: BookOpenCheck,
   },
   {
     title: "Schedule",
-    url: "#",
+    url: "/schedule",
     icon: Calendar,
   },
   {
     title: "Equipment Maintenance",
-    url: "#",
+    url: "/equipment",
     icon: Dumbbell,
   },
   {
     title: "Front Desk",
-    url: "#",
+    url: "/front-desk",
     icon: ConciergeBell,
   },
   {
     title: "Future Events",
-    url: "#",
+    url: "/future-events",
     icon: CalendarPlus,
   },
-]
+];
+
 
 export function AppSidebar() {
   return (

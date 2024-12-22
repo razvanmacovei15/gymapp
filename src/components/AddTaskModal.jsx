@@ -125,7 +125,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-pink-950"
               placeholder="Enter task title..."
               required
             ></textarea>
@@ -143,7 +143,12 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               displayValue="name"
               placeholder="Select Gyms"
               className="w-full border rounded-lg shadow-sm"
+              style={{
+                chips: { background: "#641B41", color: "white" },
+                option: { background: "white", color: "black"},
+              }}
             />
+
           </div>
           {/* Users */}
           <div>
@@ -159,6 +164,11 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               placeholder={isGymSelected ? "Select Users" : "Select a Gym first"}
               className="w-full border rounded-lg shadow-sm"
               disable={!isGymSelected} // Disable if no gym is selected
+              style={{
+                chips: { background: "#641B41", color: "white" },
+                option: { background: "white", color: "black"},
+                
+              }}
             />
           </div>
           {/* Category */}
@@ -170,7 +180,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-pink-900"
               required
             >
               <option value="">Select Category</option>
@@ -190,7 +200,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-pink-900"
               placeholder="Enter task description..."
               required
             ></textarea>
@@ -205,8 +215,9 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               name="deadline"
               value={formData.deadline}
               onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-pink-900"
               required
+              style={{color: "#641B41"}}
             />
           </div>
           {/* Priority */}
@@ -218,7 +229,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
               name="priority"
               value={formData.priority}
               onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+              className="w-full p-3 border rounded-lg shadow-sm focus:ring focus:ring-pink-900"
             >
               <option value="">Select Priority</option>
               <option value="High">High</option>
