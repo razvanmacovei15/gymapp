@@ -99,9 +99,9 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
         />
         <div className="flex flex-row items-center py-1">
           <p className="text-gray-500 pr-2">Priority:</p>
-          <Badge>
+            <Badge className={task?.priority === "High" ? "bg-red-500" : ""}>
             <p className="text-white">{task?.priority}</p>
-          </Badge>
+            </Badge>
         </div>
         <Divider className="bg-gray-200 h-0.5" />
         <div className="gap-2 flex flex-col">
@@ -127,15 +127,12 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
         <Divider className="bg-gray-200 h-0.5" />
         <Attachments />
         <div className="flex flex-row justify-between items-center gap-2 pt-8">
-          <Button
-            onClick={handleSave} // Save task with updated data
-            className="w-full bg-green-500 text-white rounded-md"
-          >
+          <Button className="w-full bg-[#494f4b] text-white rounded-md" onClick={handleSave}>
             <span>Save</span>
           </Button>
           <Button
             onClick={() => task && toggleTaskView(task)}
-            className="w-full  bg-red-500 text-white rounded-md"
+            className="w-full  bg-[#932636] text-white rounded-md"
           >
             Close
           </Button>

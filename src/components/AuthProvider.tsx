@@ -144,16 +144,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const initializeAuth = async () => {
       const token = localStorage.getItem(TOKEN_KEY);
 
-      if (!token) {
-        console.log("No token found in localStorage");
-        return;
-      }
-
-      if (token === "undefined") {
-        console.log("Token is undefined");
-        localStorage.removeItem(TOKEN_KEY);
-        return;
-      }
+    
 
       console.log("Token found in localStorage:", token);
 
@@ -188,6 +179,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
         // Optionally clear the token from localStorage
         localStorage.removeItem(TOKEN_KEY);
+
       }
     };
 
