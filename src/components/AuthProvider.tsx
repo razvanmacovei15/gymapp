@@ -180,6 +180,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           );
         } else {
           console.error("Token verification failed:", error);
+          console.log("Token verification failed:", error);
         }
 
         // Clear the invalid token and reset the auth state
