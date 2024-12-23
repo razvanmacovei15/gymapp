@@ -161,6 +161,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         }
       } else {
         console.log("No token found in localStorage");
+        console.log("Logging out...");
       }
     };
 
