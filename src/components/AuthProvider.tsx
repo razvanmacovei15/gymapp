@@ -68,7 +68,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       ] = `Bearer ${result.data.token}`;
 
       localStorage.setItem(TOKEN_KEY, result.data.token);
-
+      console.log("Token saved to localStorage:", result.data.token);
       return result;
     } catch (error) {
       console.error(error);
@@ -143,30 +143,48 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const initializeAuth = async () => {
       const token = localStorage.getItem(TOKEN_KEY);
-      if (token) {
-        try {
-          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-          // Verify token and get user details
-          const response = await axios.get(`${API_URL}/auth/me`);
+    
 
-          // Set user state
-          setAuthState({
-            authToken: token,
-            currentUser: response.data.user,
-          });
-        } catch (error: any) {
-          console.error("Token verification failed:", error.response || error);
-          handleLogout(); // Clear invalid token and user state
+      console.log("Token found in localStorage:", token);
+
+      try {
+        // Set the default Authorization header for axios
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        // Verify token and get user details
+        const response = await axios.get(`${API_URL}/auth/me`);
+
+        // Update auth state
+        setAuthState({
+          authToken: token,
+          currentUser: response.data.user,
+        });
+
+        console.log("User authenticated:", response.data.user);
+      } catch (error) {
+        // Handle token verification failure
+        if (axios.isAxiosError(error)) {
+          console.error(
+            "Token verification failed:",
+            error.response?.data || error.message
+          );
+        } else {
+          console.error("Token verification failed:", error);
+          console.log("Token verification failed:", error);
         }
-      } else {
-        console.log("No token found in localStorage");
-        console.log("Logging out...");
+
+        // Clear the invalid token and reset the auth state
+        handleLogout();
+
+        // Optionally clear the token from localStorage
+        localStorage.removeItem(TOKEN_KEY);
+
       }
     };
 
     initializeAuth();
-  }, []);
+  }, [setAuthState]);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
