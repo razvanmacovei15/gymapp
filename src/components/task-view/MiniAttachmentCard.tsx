@@ -13,10 +13,10 @@ const MiniAttachmentCard = ({ file }: MiniAttachmentCardProps) => {
       <div className="flex flex-col items-center justify-center">
         <p className="text-xs align-middle text-center p-1">Filename.png</p>
         <div className="flex flex-row gap-2 items-center">
-          <Button className="h-7 w-7 bg-blue-400 text-black">
+          <Button className="h-7 w-7 bg-[#8ca4d1] text-black">
             <Download />
           </Button>
-          <Button className="h-7 w-7 bg-red-400 text-black">
+          <Button className="h-7 w-7 bg-[#cb746a] text-black">
             <Trash2 />
           </Button>
         </div>
