@@ -18,8 +18,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./column-header";
 import { usePopup } from "../popups/PopupContext";
+import axios from "axios";
 
-export const columns: ColumnDef<Task>[] = [
+export const columns = (fetchTasksData: () => void): ColumnDef<Task>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -51,12 +52,18 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "gyms",
     header: "Gyms",
-    cell: ({ row }) => row.original.gyms.map((gym) => gym.name).join(", "), // Access data via `row.original`
+    cell: ({ row }) =>
+      row.original.gyms?.length > 0
+        ? row.original.gyms.map((gym) => `${gym.name}`).join(", ")
+        : "No gyms assigned",
   },
   {
-    accessorKey: "managersResponsible",
+    accessorKey: "users",
     header: "Asignees",
-    cell: ({ row }) => row.original.users.map((user) => user.name).join(", "), // Access data via `row.original`
+    cell: ({ row }) =>
+      row.original.users?.length > 0
+        ? row.original.users.map((user) => user.name).join(", ")
+        : "No assignees",
   },
   {
     accessorKey: "status",
@@ -89,6 +96,21 @@ export const columns: ColumnDef<Task>[] = [
 
       const { toggleTaskView } = usePopup();
 
+      const handleDelete = async () => {
+        console.log(`Deleting task-${task.taskId}`);
+        try {
+          const response = await axios.delete(
+            "http://maco-coding.go.ro:8010/tasks/delete",
+            {
+              params: { id: task.taskId },
+            }
+          );
+          fetchTasksData();
+        } catch (error) {
+          console.error("Error deleting task:", error);
+        }
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -103,7 +125,13 @@ export const columns: ColumnDef<Task>[] = [
               View task details
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                handleDelete();
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
