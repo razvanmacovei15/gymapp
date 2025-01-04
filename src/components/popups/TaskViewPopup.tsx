@@ -25,15 +25,18 @@ import { set } from "date-fns";
 import { User } from "../types/User";
 import { z } from "zod";
 import axios from "axios";
+import { get } from "react-hook-form";
 
 type TaskViewPopupProps = {
-  task?: Task;
+  initialTask?: Task;
   onTaskUpdate?: (task: Task) => void;
 };
 
-const TaskViewPopup = ({ task, onTaskUpdate }: TaskViewPopupProps) => {
+const TaskViewPopup = ({ initialTask, onTaskUpdate }: TaskViewPopupProps) => {
   const { statuses } = useTaskStatuses();
   const { categories } = useTaskCategories();
+
+  const [task, setTask] = useState<Task | null>(initialTask || null);
 
   const { isTaskViewOpen, openedTask, toggleTaskView } = usePopup();
   const [deadline, setDeadline] = useState(task?.deadline || "");
@@ -47,6 +50,21 @@ const TaskViewPopup = ({ task, onTaskUpdate }: TaskViewPopupProps) => {
   const [updatedAsignees, setUpdatedAsignees] = useState<User[]>(
     task?.users || []
   );
+
+  const getTask = async (taskId: number) => {
+    try {
+      const response = await axios.get(
+        "http://maco-coding.go.ro:8010/tasks/get",
+        {
+          params: { taskId },
+        }
+      );
+      setTask(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching task:", error);
+    }
+  };
 
   const handleSave = async () => {
     if (!task) return;
@@ -71,11 +89,15 @@ const TaskViewPopup = ({ task, onTaskUpdate }: TaskViewPopupProps) => {
           params: { taskId: task.taskId },
         }
       );
-      console.log("Saving task:", updatedTask);
-      console.log("Response:", response.data);
+
+      // Update task state after saving
+      setTask(response.data);
+
       if (onTaskUpdate) {
-        onTaskUpdate(updatedTask);
+        onTaskUpdate(response.data);
       }
+
+      getTask(task.taskId);
       return response.data;
     } catch (error) {
       console.error("Error saving task:", error);
@@ -100,6 +122,7 @@ const TaskViewPopup = ({ task, onTaskUpdate }: TaskViewPopupProps) => {
           setIsEditingTitle={setIsEditingTitle}
           setEditableTitle={setEditableTitle}
           editableTitle={editableTitle}
+          taskStatus={taskStatus}
         />
         <div className="flex flex-row items-center py-1">
           <p className="text-gray-500 pr-2">Priority:</p>
