@@ -131,7 +131,7 @@ export default function Tasks() {
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
       <ProfileMenuPopup />
-      {openedTask && <TaskViewPopup onTaskUpdate={fetchTasksData} task={openedTask} />}
+      {openedTask && <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />}
     </div>
   );
 }
