@@ -7,9 +7,15 @@ interface TaskTableProps {
   tasks: Task[]; // Replace `any` with the appropriate type if `tasks` have a defined structure
   loading: boolean;
   error: string | null;
+  fetchTasksData: () => void;
 }
 
-export default function TaskTable({ tasks, loading, error }: TaskTableProps) {
+export default function TaskTable({
+  tasks,
+  loading,
+  error,
+  fetchTasksData,
+}: TaskTableProps) {
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -20,7 +26,7 @@ export default function TaskTable({ tasks, loading, error }: TaskTableProps) {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={tasks} />
+      <DataTable columns={columns(fetchTasksData)} data={tasks} />
     </div>
   );
 }

@@ -10,6 +10,5 @@ export type Task = {
   priority: string;
   deadline: string;
   category: string;
-  subcategory: string;
   description: string;
 };

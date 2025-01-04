@@ -22,12 +22,16 @@ import { Gyms } from "../task-view/Gyms";
 import { Asignees } from "../task-view/Asignees";
 import { EditableTitle } from "../task-view/EditableTitle";
 import { set } from "date-fns";
+import { User } from "../types/User";
+import { z } from "zod";
+import axios from "axios";
 
 type TaskViewPopupProps = {
   task?: Task;
+  onTaskUpdate?: (task: Task) => void;
 };
 
-const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
+const TaskViewPopup = ({ task, onTaskUpdate }: TaskViewPopupProps) => {
   const { statuses } = useTaskStatuses();
   const { categories } = useTaskCategories();
 
@@ -38,25 +42,11 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
   const [editableTitle, setEditableTitle] = useState(task?.title || "");
   const [taskStatus, setTaskStatus] = useState(task?.status || "");
   const [taskCategory, setCategory] = useState(task?.category || "");
-  const [updatedGyms, setUpdatedGyms] = useState<Gym[]>(task?.gyms || []); // Track updated gyms
+  const [updatedGyms, setUpdatedGyms] = useState<Gym[]>(task?.gyms || []);
 
-  useEffect(() => {
-    if (task?.status) {
-      setTaskStatus(task.status);
-    }
-  }, [task?.status]);
-
-  useEffect(() => {
-    if (task?.category) {
-      setCategory(task.category);
-    }
-  }, [task?.category]);
-
-  useEffect(() => {
-    if (task?.title) {
-      setEditableTitle(task.title);
-    }
-  }, [task?.title]);
+  const [updatedAsignees, setUpdatedAsignees] = useState<User[]>(
+    task?.users || []
+  );
 
   const handleSave = async () => {
     if (!task) return;
@@ -64,15 +54,29 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
     const updatedTask = {
       ...task,
       title: editableTitle,
-      description,
-      deadline,
+      description: description,
+      deadline: deadline,
       status: taskStatus,
       category: taskCategory,
       gyms: updatedGyms,
+      users: updatedAsignees,
     };
 
     try {
+      // Save the updated task to the server
+      const response = await axios.patch(
+        "http://maco-coding.go.ro:8010/tasks/update",
+        updatedTask,
+        {
+          params: { taskId: task.taskId },
+        }
+      );
       console.log("Saving task:", updatedTask);
+      console.log("Response:", response.data);
+      if (onTaskUpdate) {
+        onTaskUpdate(updatedTask);
+      }
+      return response.data;
     } catch (error) {
       console.error("Error saving task:", error);
     }
@@ -99,17 +103,17 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
         />
         <div className="flex flex-row items-center py-1">
           <p className="text-gray-500 pr-2">Priority:</p>
-            <Badge className={task?.priority === "High" ? "bg-red-500" : ""}>
+          <Badge className={task?.priority === "High" ? "bg-red-500" : ""}>
             <p className="text-white">{task?.priority}</p>
-            </Badge>
+          </Badge>
         </div>
         <Divider className="bg-gray-200 h-0.5" />
         <div className="gap-2 flex flex-col">
-          <Gyms
-            initialTaskGyms={task?.gyms || []}
-            onGymsChange={setUpdatedGyms}
+          <Gyms initialTaskGyms={task?.gyms} onGymsChange={setUpdatedGyms} />
+          <Asignees
+            initialTaskAsignees={task?.users}
+            onAsigneesChange={setUpdatedAsignees}
           />
-          <Asignees task={task} />
           <DueDate task={task} setDeadline={setDeadline} />
           <Status
             statuses={statuses}
@@ -122,12 +126,18 @@ const TaskViewPopup = ({ task }: TaskViewPopupProps) => {
             setCategory={setCategory}
           />
           <CreatedBy />
-          <Description task={task} setDescription={setDescription} />
+          <Description
+            description={description}
+            setDescription={setDescription}
+          />
         </div>
         <Divider className="bg-gray-200 h-0.5" />
         <Attachments />
         <div className="flex flex-row justify-between items-center gap-2 pt-8">
-          <Button className="w-full bg-[#494f4b] text-white rounded-md" onClick={handleSave}>
+          <Button
+            className="w-full bg-[#494f4b] text-white rounded-md"
+            onClick={handleSave}
+          >
             <span>Save</span>
           </Button>
           <Button
