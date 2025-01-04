@@ -132,7 +132,7 @@ const TaskViewPopup = ({ task, onTaskUpdate }: TaskViewPopupProps) => {
           />
         </div>
         <Divider className="bg-gray-200 h-0.5" />
-        <Attachments />
+        <Attachments taskId={task.taskId} />
         <div className="flex flex-row justify-between items-center gap-2 pt-8">
           <Button
             className="w-full bg-[#494f4b] text-white rounded-md"

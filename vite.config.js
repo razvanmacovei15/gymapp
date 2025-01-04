@@ -11,15 +11,18 @@ export default defineConfig({
     strictPort: true,
   },
   server: {
-    port: 8020,
+    port: parseInt(process.env.VITE_PORT) || 8020,
     strictPort: true,
-    host: true,
-    origin: "http://0.0.0.0:8020",
+    host: "0.0.0.0",
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
     extensions: [".js", ".jsx", ".ts", ".tsx"], // Add .jsx support
+  },
+  build: {
+    chunkSizeWarningLimit: 1000, // Increase limit to 1 MB
+    outDir: "dist", // Ensure build files go to dist folder
   },
 });

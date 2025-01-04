@@ -1,17 +1,21 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import MiniAttachmentCard from "./MiniAttachmentCard";
 import axios from "axios";
+import { get } from "react-hook-form";
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
 
-export const Attachments = () => {
+type AttachmentsProps = {
+  taskId: number;
+};
+
+export const Attachments = ({ taskId }: AttachmentsProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [bucketName, setBucketName] = useState<string>("test-files"); // New state for bucket name
-  const [objectName, setObjectName] = useState<string>("test-file"); // New state for object name
+  const [files, setFiles] = useState<string[]>([]);
 
   const handleAddFileClick = () => {
     if (fileInputRef.current) {
@@ -29,42 +33,106 @@ export const Attachments = () => {
       console.log("Selected file:", selectedFile);
 
       // Start the upload after setting the file
-      await uploadFile(selectedFile);
+      await uploadFile(selectedFile, taskId);
     }
   };
 
-  async function uploadFile(selectedFile: File) {
-    if (!selectedFile || !bucketName || !objectName) return;
+  const downloadFile = async (file: string) => {
+    try {
+      const response = await axios.get(
+        "http://maco-coding.go.ro:8010/tasks/downloadFile",
+        {
+          params: { taskId, fileName: file },
+          responseType: "blob", // Handle binary file download
+        }
+      );
+
+      // Create a URL for the downloaded file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", file); // Set the file name for download
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
+  const getFiles = async () => {
+    try {
+      const response = await axios.get(
+        "http://maco-coding.go.ro:8010/tasks/getFiles",
+        {
+          params: { taskId },
+        }
+      );
+      console.log("Files:", response.data);
+      setFiles(response.data);
+    } catch (error) {
+      console.error("Error fetching files:", error);
+    }
+  };
+
+  const deleteFile = async (file: string) => {
+    try {
+      const response = await axios.delete(
+        "http://maco-coding.go.ro:8010/tasks/deleteFile",
+        {
+          params: { taskId, fileName: file },
+        }
+      );
+      console.log("File deleted:", response.data);
+      getFiles();
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
+
+  useEffect(() => {
+    getFiles();
+  }, [taskId]);
+
+  async function uploadFile(selectedFile: File, taskId: number) {
+    if (!selectedFile) return;
 
     setUploadStatus("uploading");
     setUploadProgress(0);
 
     const formData = new FormData();
     formData.append("file", selectedFile);
-    formData.append("bucketName", bucketName);
-    formData.append("objectName", objectName);
 
-    console.log("Uploading file:", selectedFile);
-    console.log("Bucket name:", bucketName);
-    console.log("Object name:", objectName);
+    console.log("Uploading file with taskId:", taskId);
 
     try {
-      await axios.post("http://maco-coding.go.ro:8010/minio/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress: (progressEvent) => {
-          const progress = progressEvent.total
-            ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            : 0;
-          setUploadProgress(progress);
-        },
-      });
+      const response = await axios.post(
+        `http://maco-coding.go.ro:8010/tasks/uploadFile`,
+        formData,
+        {
+          params: { taskId },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const progress = progressEvent.total
+              ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              : 0;
+            setUploadProgress(progress);
+          },
+        }
+      );
+
       setUploadStatus("success");
       setUploadProgress(100);
-    } catch {
+
+      console.log("File uploaded successfully:", response.data);
+      getFiles();
+    } catch (error) {
       setUploadStatus("error");
       setUploadProgress(0);
+
+      console.error("Error uploading file:", error);
     }
   }
 
@@ -72,9 +140,18 @@ export const Attachments = () => {
     <div className="flex flex-col items-start gap-4">
       <p className="w-1/5 text-gray-500">Attachments</p>
       <div className="flex flex-row gap-6 items-center justify-center">
-        <MiniAttachmentCard />
-        <MiniAttachmentCard />
-        <MiniAttachmentCard />
+        {files.length > 0 ? (
+          files.map((file, index) => (
+            <MiniAttachmentCard
+              key={index}
+              file={file}
+              onDownload={() => downloadFile(file)}
+              onDelete={() => deleteFile(file)}
+            />
+          ))
+        ) : (
+          <p>No files attached to task</p>
+        )}
         <Button
           variant="outline"
           onClick={handleAddFileClick}
