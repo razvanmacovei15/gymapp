@@ -45,6 +45,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       : null,
   });
 
+  console.log("ce pizda matii ai de nu mergi...");
+
   // Fetch Profile Photo
   async function fetchProfilePhoto() {
     try {
