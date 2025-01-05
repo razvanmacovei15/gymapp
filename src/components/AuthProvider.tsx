@@ -1,30 +1,34 @@
-import React, { useEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+  createContext,
+  PropsWithChildren,
+  useContext,
+} from "react";
 import axios from "axios";
-import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { User } from "./types/User";
-import { set } from "zod";
 
-type AuthContext = {
+const TOKEN_KEY = "authToken";
+export const API_URL = "http://maco-coding.go.ro:8010";
+
+type AuthContextType = {
   authState: {
     authToken?: string | null;
     currentUser?: User | null;
   };
-  handleLogin?: (email: string, password: string) => Promise<any>;
-  handleLogout: () => Promise<any>;
+  handleLogin: (email: string, password: string) => Promise<any>;
+  handleLogout: () => void;
   handleRegister: (
     name: string,
     email: string,
     password: string,
     role: string
   ) => Promise<any>;
-  fetchProfilePhoto: () => Promise<any>;
+  fetchProfilePhoto: () => Promise<void>;
   profilePhoto: string;
 };
 
-const TOKEN_KEY = "authToken";
-export const API_URL = "http://maco-coding.go.ro:8010";
-
-const AuthContext = createContext<AuthContext | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 type AuthProviderProps = PropsWithChildren;
 
@@ -36,27 +40,30 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     currentUser: User | null;
   }>({
     authToken: localStorage.getItem(TOKEN_KEY),
-    currentUser: null,
+    currentUser: localStorage.getItem("currentUser")
+      ? JSON.parse(localStorage.getItem("currentUser") as string)
+      : null,
   });
 
+  // Fetch Profile Photo
   async function fetchProfilePhoto() {
     try {
       const result = await axios.get(`${API_URL}/minio/generate-url`);
-
       setProfilePhoto(result.data);
-
-      return result.data; // Return the updated URL
     } catch (error) {
       console.error("Error fetching profile photo:", error);
     }
   }
 
+  // Handle Login
   async function handleLogin(email: string, password: string) {
     try {
       const result = await axios.post(`${API_URL}/auth/login`, {
         email,
         password,
       });
+
+      console.log("Login successful:", result.data);
 
       setAuthState({
         authToken: result.data.token,
@@ -66,20 +73,36 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${result.data.token}`;
-
       localStorage.setItem(TOKEN_KEY, result.data.token);
-      console.log("Token saved to localStorage:", result.data.token);
+      localStorage.setItem("currentUser", JSON.stringify(result.data.user));
+
+      // Fetch profile photo after login
+      await fetchProfilePhoto();
+
       return result;
     } catch (error) {
       console.error(error);
-
-      const errorMsg =
-        (error as any)?.response.data?.message || "An error occurred";
-
-      return { error: true, message: errorMsg };
+      return {
+        error: true,
+        message: (error as any)?.response?.data?.message || "An error occurred",
+      };
     }
   }
 
+  // Handle Logout
+  function handleLogout() {
+    setAuthState({
+      authToken: null,
+      currentUser: null,
+    });
+
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem("currentUser");
+    delete axios.defaults.headers.common["Authorization"];
+    setProfilePhoto(""); // Clear the profile photo
+  }
+
+  // Handle Register
   async function handleRegister(
     name: string,
     email: string,
@@ -95,41 +118,53 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       });
 
       if (result.status === 200 || result.status === 201) {
-        const loginResult = await handleLogin(email, password);
-
-        if ("error" in loginResult) {
-          console.error(
-            "Error logging in after registration",
-            loginResult.message
-          );
-          return {
-            error: true,
-            message: "Error logging in after registration",
-          };
-        }
-        return loginResult;
+        return handleLogin(email, password);
       }
       return result;
     } catch (error) {
       console.error(error);
-
-      const errorMsg =
-        (error as any)?.response.data?.message || "An error occurred";
-
-      return { error: true, message: errorMsg };
+      return {
+        error: true,
+        message: (error as any)?.response?.data?.message || "An error occurred",
+      };
     }
   }
 
-  async function handleLogout() {
-    setAuthState({
-      authToken: null,
-      currentUser: null,
-    });
+  // Initialize Auth on Page Load
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const token = localStorage.getItem(TOKEN_KEY);
 
-    localStorage.removeItem(TOKEN_KEY);
+      if (!token) {
+        handleLogout();
+        return;
+      }
 
-    axios.defaults.headers.common["Authorization"] = "";
-  }
+      console.log("Token found in localStorage:", token);
+
+      try {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await axios.get(`${API_URL}/auth/me`);
+
+        setAuthState({
+          authToken: token,
+          currentUser: response.data.user,
+        });
+
+        localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+
+        // Fetch profile photo after restoring auth state
+        await fetchProfilePhoto();
+
+        console.log("User authenticated:", response.data.user);
+      } catch (error) {
+        console.error("Token verification failed:", error);
+        handleLogout();
+      }
+    };
+
+    initializeAuth();
+  }, []);
 
   const contextValue = {
     authState,
@@ -140,57 +175,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     fetchProfilePhoto,
   };
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      const token = localStorage.getItem(TOKEN_KEY);
-
-      console.log("Token found in localStorage:", token);
-
-      try {
-        // Set the default Authorization header for axios
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-        // Verify token and get user details
-        const response = await axios.get(`${API_URL}/auth/me`);
-
-        // Update auth state
-        setAuthState({
-          authToken: token,
-          currentUser: response.data.user,
-        });
-
-        console.log("User authenticated:", response.data.user);
-      } catch (error) {
-        // Handle token verification failure
-        if (axios.isAxiosError(error)) {
-          console.error(
-            "Token verification failed:",
-            error.response?.data || error.message
-          );
-        } else {
-          console.error("Token verification failed:", error);
-          console.log("Token verification failed:", error);
-        }
-
-        // Clear the invalid token and reset the auth state
-        handleLogout();
-
-        // Optionally clear the token from localStorage
-        localStorage.removeItem(TOKEN_KEY);
-      }
-    };
-
-    initializeAuth();
-  }, [setAuthState]);
-
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }
 
+// useAuth Hook
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
