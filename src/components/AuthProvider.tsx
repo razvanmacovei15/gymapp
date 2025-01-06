@@ -142,8 +142,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         return;
       }
 
-      console.log("Token found in localStorage:", token);
-
       try {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         const response = await axios.get(`${API_URL}/auth/me`);
