@@ -14,7 +14,7 @@ export default function TopBar( ) {
   const [gyms, setGyms] = useState([]);
 
   const getGyms = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all", {
       headers: {
         Authorization: `Bearer ${token}`,

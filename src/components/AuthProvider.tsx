@@ -48,7 +48,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   // Fetch Profile Photo
   async function fetchProfilePhoto() {
     try {
-      const token = localStorage.getItem("token"); // Get the token from local storage
+      const token = localStorage.getItem("authToken"); // Get the token from local storage
 
       const result = await axios.get(`${API_URL}/minio/generate-url`, {
         headers: {
