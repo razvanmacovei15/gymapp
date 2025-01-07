@@ -45,12 +45,16 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       : null,
   });
 
-  console.log("ce pizda matii ai de nu mergi...");
-
   // Fetch Profile Photo
   async function fetchProfilePhoto() {
     try {
-      const result = await axios.get(`${API_URL}/minio/generate-url`);
+      const token = localStorage.getItem("authToken"); // Get the token from local storage
+
+      const result = await axios.get(`${API_URL}/minio/generate-url`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setProfilePhoto(result.data);
     } catch (error) {
       console.error("Error fetching profile photo:", error);
@@ -137,17 +141,22 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const initializeAuth = async () => {
       const token = localStorage.getItem(TOKEN_KEY);
 
+      console.log("Token found:", token);
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
       if (!token) {
         handleLogout();
         return;
       }
 
       try {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         const response = await axios.get(`${API_URL}/auth/me`);
 
+        console.log("Token verified:", response.data);
+
         setAuthState({
-          authToken: token,
+          authToken: response.data.token,
           currentUser: response.data.user,
         });
 

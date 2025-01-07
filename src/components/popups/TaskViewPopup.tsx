@@ -56,7 +56,7 @@ const TaskViewPopup = ({ initialTask, onTaskUpdate }: TaskViewPopupProps) => {
       const response = await axios.get(
         "http://maco-coding.go.ro:8010/tasks/get",
         {
-          params: { taskId },
+          params: { id: taskId },
         }
       );
       setTask(response.data);
@@ -86,7 +86,9 @@ const TaskViewPopup = ({ initialTask, onTaskUpdate }: TaskViewPopupProps) => {
         "http://maco-coding.go.ro:8010/tasks/update",
         updatedTask,
         {
-          params: { taskId: task.taskId },
+          params: {
+            taskId: task.taskId, // Query parameter
+          },
         }
       );
 
