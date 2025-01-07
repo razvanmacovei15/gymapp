@@ -31,7 +31,6 @@ export default function Tasks() {
         config
       );
       setTasks(response.data);
-      console.log("Tasks from API:", response.data);
     } catch (err) {
       console.error("Failed to fetch tasks:", err);
       setError("Failed to fetch tasks.");
@@ -59,25 +58,6 @@ export default function Tasks() {
     }
   };
 
-  const fetchTaskStatuses = async () => {
-    try {
-      setLoading(true);
-
-      const config = {
-        headers: { Authorization: `Bearer ${authState.authToken}` },
-      };
-      const response = await axios.get(
-        "http://maco-coding.go.ro:8010/api/enum/statuses",
-        config
-      );
-    } catch (err) {
-      console.error("Failed to fetch task statuses:", err);
-      setError("Failed to fetch task statuses.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchTasksData();
   }, []);
@@ -92,7 +72,6 @@ export default function Tasks() {
         "http://maco-coding.go.ro:8010/tasks/create",
         newTask
       );
-      console.log("Task added successfully:", response.data);
       fetchTasksData(); // Refresh task list
       toggleModal(); // Close modal
     } catch (err) {
@@ -103,7 +82,6 @@ export default function Tasks() {
   return (
     <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full  p-4">
       <h2 className="text-5xl font-bold m-10 text-left ml-7 text-white" onClick={()=>{
-        console.log(authState.authToken);
         fetchRolesData();
       }}>TASKS</h2>
 
@@ -118,7 +96,6 @@ export default function Tasks() {
         </div>
       )}
 
-      {/* "+" Button */}
       <button
         onClick={toggleModal}
         className="fixed bottom-4 right-4 bg-black text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
@@ -126,7 +103,6 @@ export default function Tasks() {
         +
       </button>
 
-      {/* Modal */}
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}

@@ -20,7 +20,6 @@ export default function TopBar( ) {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data);
     const gymNames = response.data.map((gym) => gym.name);
     return setGyms(gymNames);
   };
@@ -28,8 +27,6 @@ export default function TopBar( ) {
   const handleLocationChange = (newLocation) => {
     console.log("Selected location:", newLocation);
   };
-
-  console.log(gyms)
 
   useEffect(() => {
     getGyms();

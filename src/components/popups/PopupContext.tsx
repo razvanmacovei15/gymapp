@@ -34,9 +34,6 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  console.log("isTaskViewOpen:", isTaskViewOpen);
-  console.log("task:", task?.title);
-
   const closeAllPopups = () => {
     setIsProfileMenuOpen(false);
     setIsTaskViewOpen(false);
