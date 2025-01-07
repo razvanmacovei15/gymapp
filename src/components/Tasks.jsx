@@ -100,8 +100,6 @@ export default function Tasks() {
     }
   };
 
-  const transformedTasks = tasks.map((task) => ({ ...task.taskDTO }));
-
   return (
     <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full  p-4">
       <h2 className="text-5xl font-bold m-10 text-left ml-7 text-white" onClick={()=>{
@@ -115,7 +113,7 @@ export default function Tasks() {
         <p className="text-red-500 text-center">{error}</p>
       ) : (
         <div className="space-y-4">
-          <TaskTable tasks={transformedTasks} loading={loading} error={error} />
+          <TaskTable tasks={tasks} loading={loading} error={error} fetchTasksData={fetchTasksData}/>
         
         </div>
       )}
@@ -132,9 +130,8 @@ export default function Tasks() {
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
-      <FileUploader/>
       <ProfileMenuPopup />
-      <TaskViewPopup task={openedTask} />
+      {openedTask && <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />}
     </div>
   );
 }

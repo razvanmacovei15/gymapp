@@ -36,13 +36,14 @@ const MiniUserCard = ({ user }: MiniUserCardProps) => {
   }, []);
 
   return (
-
-    <div className="flex flex-row bg-pink-900 rounded-full p-2 h-10 text-sm items-center justify-center">
-      <Avatar className="h-6 w-6 mr-2 ">
+    <div className="flex flex-row bg-pink-900 rounded-full p-1 h-10 text-sm items-center justify-center">
+      <Avatar className="h-8 w-8 mr-2 ">
         <AvatarImage src={presignedUrl} />
         <AvatarFallback>SC</AvatarFallback>
       </Avatar>
-      <p className="text-xs align-middle text-center p-1 text-white">{user?.name}</p>
+      <p className="text-xs align-middle text-center p-1 text-white">
+        {user?.name}
+      </p>
     </div>
   );
 };

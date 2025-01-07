@@ -60,5 +60,6 @@ export const EditableTitle = ({ task, isEditingTitle, setIsEditingTitle,setEdita
       }`}
       />
       </div>
+
   );
-  
+};
