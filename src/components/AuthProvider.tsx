@@ -69,8 +69,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
 
-      console.log("Login successful:", result.data);
-
       setAuthState({
         authToken: result.data.token,
         currentUser: result.data.user,
@@ -141,8 +139,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const initializeAuth = async () => {
       const token = localStorage.getItem(TOKEN_KEY);
 
-      console.log("Token found:", token);
-
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       if (!token) {
@@ -153,8 +149,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       try {
         const response = await axios.get(`${API_URL}/auth/me`);
 
-        console.log("Token verified:", response.data);
-
         setAuthState({
           authToken: response.data.token,
           currentUser: response.data.user,
@@ -162,10 +156,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
         localStorage.setItem("currentUser", JSON.stringify(response.data.user));
 
-        // Fetch profile photo after restoring auth state
         await fetchProfilePhoto();
-
-        console.log("User authenticated:", response.data.user);
       } catch (error) {
         console.error("Token verification failed:", error);
         handleLogout();
