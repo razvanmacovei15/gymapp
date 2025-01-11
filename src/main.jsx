@@ -1,4 +1,3 @@
-
 import { StrictMode } from "react";
 import ReactDom from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -25,7 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <UnderDevelopment />, // Dashboard routed to Dashboard component
+        element: <Dashboard />, // Dashboard routed to Dashboard component
       },
       {
         path: "tasks",

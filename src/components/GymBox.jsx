@@ -1,22 +1,60 @@
 import React from "react";
-import { PieChart, Pie, Sector, Label } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { PieChart, Pie, Sector, Label, Legend, Cell } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "./Card.jsx";
+
+const COLORS = ["#81d9b9", "#4d6792", "#d388aa", "#e94949", "#ffc107"];
 
 const GymBox = ({ gymName, photoUrl, taskData }) => {
-  const statuses = ["DONE", "IN_PROGRESS", "TO_DO", "CANCELLED", "BACKLOG"];
   const totalTasks = taskData.reduce((sum, task) => sum + task.value, 0);
+
+  console.log("sunt aici?????", taskData);
+  const renderActiveShape = (props) => {
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
+      props;
+
+    return (
+      <g>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius + 10}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={outerRadius + 12}
+          outerRadius={outerRadius + 20}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+          opacity={0.7}
+        />
+      </g>
+    );
+  };
 
   return (
     <Card className="flex flex-col w-64 shadow-md">
+      {/* Header */}
       <CardHeader>
-        <CardTitle className="text-center text-lg">{gymName}</CardTitle>
+        <CardTitle className="text-center text-lg font-semibold">
+          {gymName}
+        </CardTitle>
       </CardHeader>
+
+      {/* Image */}
       <img
         src={photoUrl}
         alt={`${gymName} logo`}
-        className="w-full h-32 object-cover rounded-md"
+        className="w-full h-18 object-cover rounded-md"
       />
-      <CardContent>
+
+      {/* Pie Chart */}
+      <CardContent className="flex flex-col items-center">
         <PieChart width={200} height={200}>
           <Pie
             data={taskData}
@@ -24,29 +62,30 @@ const GymBox = ({ gymName, photoUrl, taskData }) => {
             nameKey="status"
             cx="50%"
             cy="50%"
+            innerRadius={50}
             outerRadius={70}
-            fill="#8884d8"
-            label
-            activeShape={({
-              outerRadius = 0,
-              ...props
-            }) => (
-              <g>
-                <Sector {...props} outerRadius={outerRadius + 10} />
-                <Sector
-                  {...props}
-                  outerRadius={outerRadius + 25}
-                  innerRadius={outerRadius + 12}
-                />
-              </g>
-            )}
+            label={({ name, value }) => `${value}`}
+            activeIndex={0} // You can dynamically set this based on user interaction
+            activeShape={renderActiveShape}
           >
+            {taskData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
             <Label
-              value={totalTasks}
+              value={`Total: ${totalTasks}`}
               position="center"
-              className="text-2xl font-bold"
+              className="fill-black text-xl font-bold"
             />
           </Pie>
+          <Legend
+            layout="horizontal"
+            align="center"
+            verticalAlign="bottom"
+            iconSize={10}
+          />
         </PieChart>
       </CardContent>
     </Card>
