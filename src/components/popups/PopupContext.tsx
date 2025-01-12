@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Task } from "../types/Task";
+import { is } from "date-fns/locale";
 
 // Define the context type
 interface PopupContextType {
@@ -31,6 +32,7 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
       // Open a new task or toggle to a different one
       setIsTaskViewOpen(true);
       setTask(toggledTask);
+      console.log("Opened task:", isTaskViewOpen, task);
     }
   };
 
