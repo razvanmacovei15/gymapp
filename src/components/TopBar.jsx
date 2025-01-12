@@ -6,8 +6,12 @@ import { useEffect, useState } from "react";
 import UserProfile from "./UserProfile";
 import { UserNav } from "./top-bar/user-nav";
 import { useSidebar } from "./ui/sidebar";
+import { usePopup } from "./popups/PopupContext";
+import ProfileMenuPopup from "./popups/ProfileMenuPopup";
 
 export default function TopBar( ) {
+
+  const { toggleProfileMenu } = usePopup();
 
   const {open, toggleSidebar} = useSidebar();
 
@@ -46,7 +50,10 @@ export default function TopBar( ) {
           locations={gyms}
           onLocationChange={handleLocationChange}
         />
-        <UserNav />
+        <UserNav toggleProfileMenu={toggleProfileMenu}/>
+        <ProfileMenuPopup/>
+
+
       </div>
     </header>
 

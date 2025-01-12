@@ -14,15 +14,17 @@ import {
 } from "../ui/dropdown-menu";
 import { usePopup } from "../popups/PopupContext";
 
-export function UserNav() {
+type UserNavProps = {
+  toggleProfileMenu: () => void;
+};
+
+export function UserNav({ toggleProfileMenu }: UserNavProps) {
   const { authState, handleLogout, profilePhoto } = useAuth();
   const user = authState.currentUser;
 
   // Conditionally update user details if the user is an admin
   const displayName = user?.name === "admin" ? "Admin" : user?.name;
   const displayEmail = user?.name === "admin" ? "admin@gmail.com" : user?.email;
-
-  const { toggleProfileMenu } = usePopup();
 
   return (
     <DropdownMenu>
