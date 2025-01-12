@@ -124,7 +124,6 @@ const TaskViewPopup = ({ initialTask, onTaskUpdate }: TaskViewPopupProps) => {
           setIsEditingTitle={setIsEditingTitle}
           setEditableTitle={setEditableTitle}
           editableTitle={editableTitle}
-          taskStatus={taskStatus}
         />
         <div className="flex flex-row items-center py-1">
           <p className="text-gray-500 pr-2">Priority:</p>

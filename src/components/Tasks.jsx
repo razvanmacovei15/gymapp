@@ -102,7 +102,6 @@ export default function Tasks() {
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
-      <ProfileMenuPopup/>
 
 {openedTask && <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />}
     </div>
