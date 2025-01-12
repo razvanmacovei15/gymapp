@@ -33,7 +33,13 @@ export default function TopBar( ) {
   }, []);
 
   return (
-    <header className="h-32 bg-gradient-to-t from-gray-950 to-pink-950 flex justify-between items-center px-8 py-4">
+    <header
+      className="fixed top-0 left-0 z-50 h-32 bg-gradient-to-t from-gray-950 to-pink-950 flex justify-between items-center px-8 py-4 shadow-lg transition-all duration-300"
+      style={{
+        width: `calc(100% - ${open ? "16rem" : "3rem"})`, // Adjust width based on sidebar state
+        marginLeft: open ? "16rem" : "3rem", // Adjust margin based on sidebar state
+      }}
+    >
       <HeaderMenu toggleSidebar={toggleSidebar} />
       <div className="flex items-center gap-4">
         <NotificationAndGymSelector
@@ -43,5 +49,6 @@ export default function TopBar( ) {
         <UserNav />
       </div>
     </header>
+
   );
 }

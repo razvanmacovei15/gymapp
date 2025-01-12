@@ -3,13 +3,12 @@ import axios from "axios";
 import AddTaskModal from "./AddTaskModal";
 import { useAuth } from "./AuthProvider";
 import TaskTable from "./table/task-table";
-import FileUploader from "./file-uploader/FileUploader";
-import ProfileMenuPopup from "./popups/ProfileMenuPopup";
-import TaskViewPopup from "./popups/TaskViewPopup";
+import { useSidebar } from "./ui/sidebar"; // Import the Sidebar context
 import { usePopup } from "./popups/PopupContext";
 
 export default function Tasks() {
   const { authState } = useAuth();
+  const { open } = useSidebar(); // Get the sidebar state (expanded or collapsed)
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,25 +38,6 @@ export default function Tasks() {
     }
   };
 
-  const fetchRolesData = async () => {
-    try {
-      setLoading(true);
-
-      const config = {
-        headers: { Authorization: `Bearer ${authState.authToken}` },
-      };
-      const response = await axios.get(
-        "http://maco-coding.go.ro:8010/api/enum/roles",
-        config
-      );
-    } catch (err) {
-      console.error("Failed to fetch roles:", err);
-      setError("Failed to fetch roles.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchTasksData();
   }, []);
@@ -80,10 +60,19 @@ export default function Tasks() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full  p-4">
-      <h2 className="text-5xl font-bold m-10 text-left ml-7 text-white" onClick={()=>{
-        fetchRolesData();
-      }}>TASKS</h2>
+    <div
+      className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 w-fit transition-all duration-300 mt-32"
+      style={{
+        marginLeft: open ? "5rem" : "15rem", // Adjust margin for sidebar state
+        padding: "1rem",
+      }}
+    >
+      <h2
+        className="text-5xl font-bold text-left mb-10 text-white"
+        onClick={fetchTasksData}
+      >
+        TASKS
+      </h2>
 
       {loading ? (
         <p className="text-white text-center">Loading tasks...</p>
@@ -91,8 +80,12 @@ export default function Tasks() {
         <p className="text-red-500 text-center">{error}</p>
       ) : (
         <div className="space-y-4">
-          <TaskTable tasks={tasks} loading={loading} error={error} fetchTasksData={fetchTasksData}/>
-        
+          <TaskTable
+            tasks={tasks}
+            loading={loading}
+            error={error}
+            fetchTasksData={fetchTasksData}
+          />
         </div>
       )}
 
@@ -106,8 +99,6 @@ export default function Tasks() {
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
-      <ProfileMenuPopup />
-      {openedTask && <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />}
     </div>
   );
 }

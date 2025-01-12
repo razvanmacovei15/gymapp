@@ -3,7 +3,7 @@ import { IoMenuOutline } from "react-icons/io5";
 
 export default function HeaderMenu({ toggleSidebar }) {
   return (
-    <div className="flex items-center">
+    <div className="flex items-center ">
       <IoMenuOutline
         size={30}
         className="cursor-pointer"

@@ -25,7 +25,7 @@ export default function TaskTable({
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto">
       <DataTable columns={columns(fetchTasksData)} data={tasks} />
     </div>
   );
