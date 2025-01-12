@@ -5,6 +5,8 @@ import { useAuth } from "./AuthProvider";
 import TaskTable from "./table/task-table";
 import { useSidebar } from "./ui/sidebar"; // Import the Sidebar context
 import { usePopup } from "./popups/PopupContext";
+import ProfileMenuPopup from "./popups/ProfileMenuPopup";
+import TaskViewPopup from "./popups/TaskViewPopup";
 
 export default function Tasks() {
   const { authState } = useAuth();
@@ -61,17 +63,17 @@ export default function Tasks() {
 
   return (
     <div
-      className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 w-fit transition-all duration-300 mt-32"
+      className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 w-full max-w-[100vw] transition-all duration-300 mt-32  justify-center"
       style={{
-        marginLeft: open ? "5rem" : "15rem", // Adjust margin for sidebar state
+        // marginLeft: open ? "5rem" : "15rem", // Adjust margin for sidebar state
         padding: "1rem",
       }}
     >
       <h2
-        className="text-5xl font-bold text-left mb-10 text-white"
+        className="text-5xl font-bold text-left mb-10 text-white  "
         onClick={fetchTasksData}
       >
-        TASKS
+        TASKS:
       </h2>
 
       {loading ? (
@@ -96,9 +98,13 @@ export default function Tasks() {
         +
       </button>
 
+
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
+      <ProfileMenuPopup/>
+
+{openedTask && <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />}
     </div>
   );
 }

@@ -52,7 +52,7 @@ const GymBox = ({ gymName, photoUrl, taskData }) => {
           className="w-40 h-40 rounded-md mb-4"
         />
         <CardTitle className="text-center text-lg font-semibold">
-          {gymName}
+        {gymName.toUpperCase()}
         </CardTitle>
       </div>
 
