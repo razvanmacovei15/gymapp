@@ -61,19 +61,19 @@ export default function Tasks() {
 
   return (
     <div
-      className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 h-full transition-all duration-300"
+      className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 w-fit transition-all duration-300 mt-32"
       style={{
-        marginLeft: open ? "16rem" : "3rem", // Adjust margin for sidebar state
-        width: `calc(100% - ${open ? "16rem" : "3rem"})`, // Dynamically calculate width
+        marginLeft: open ? "5rem" : "15rem", // Adjust margin for sidebar state
+        padding: "1rem",
       }}
     >
       <h2
-        className="text-5xl font-bold m-10 text-left ml-7 text-white"
+        className="text-5xl font-bold text-left mb-10 text-white"
         onClick={fetchTasksData}
       >
         TASKS
       </h2>
-  
+
       {loading ? (
         <p className="text-white text-center">Loading tasks...</p>
       ) : error ? (
@@ -88,18 +88,17 @@ export default function Tasks() {
           />
         </div>
       )}
-  
+
       <button
         onClick={toggleModal}
         className="fixed bottom-4 right-4 bg-black text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
       >
         +
       </button>
-  
+
       {isModalOpen && (
         <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
       )}
     </div>
   );
-  
 }

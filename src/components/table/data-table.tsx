@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="rounded-md border">
       <div>
-        <div className="flex items-center py-4">
+        <div className="flex items-center">
           <DataTableViewOptions table={table} />
         </div>
       </div>
