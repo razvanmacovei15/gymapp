@@ -10,9 +10,6 @@ export const CreatedBy = () => {
             {authState.currentUser && (
               <MiniUserCard user={authState.currentUser} />
             )}
-            <p className="text-gray-500 text-sm pl-5">
-              //todo: this needs to change into the real creator of the task
-            </p>
           </div>
     )
 }

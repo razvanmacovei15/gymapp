@@ -40,9 +40,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-4 bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 min-h-screen flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-center mb-6">Gym Dashboard</h1>
-
+    <div className="p-4 bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 min-h-screen flex flex-col items-center mt-24">
       {error ? (
         <p className="text-red-500 text-center">{error}</p>
       ) : (
