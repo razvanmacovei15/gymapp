@@ -69,6 +69,16 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center">
           <DataTableViewOptions table={table} />
         </div>
+        <div className="pl-3 pb-3">
+          <Input
+            placeholder="Filter titles..."
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
       </div>
       <div>
         <Table>
