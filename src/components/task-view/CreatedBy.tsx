@@ -2,6 +2,7 @@ import { useAuth } from "../AuthProvider";
 import MiniUserCard from "./MiniUserCard";
 
 export const CreatedBy = () => {
+
   const { authState } = useAuth();
   return (
     <div className="flex flex-row items-center">

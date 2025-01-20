@@ -73,7 +73,7 @@ export default function Tasks() {
         className="text-5xl font-bold text-left mb-10 text-white  "
         onClick={fetchTasksData}
       >
-        TASKS:
+        TASKS
       </h2>
 
       {loading ? (
