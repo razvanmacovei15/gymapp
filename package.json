@@ -2,7 +2,7 @@
   "name": "gym_management_frontend",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://RazvanMacovei15.github.io/",
+  "homepage": "https://razvanmacovei15.github.io/gymapp",
   "type": "module",
   "scripts": {
     "predeploy": "npm run build",
