@@ -23,11 +23,11 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "dashboard",
+        path: "/gymapp/dashboard",
         element: <Dashboard />, // Dashboard routed to Dashboard component
       },
       {
-        path: "tasks",
+        path: "/gymapp/tasks",
         element: <Tasks />, // Tasks routed to the Tasks component
       },
       
