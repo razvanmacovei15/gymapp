@@ -31,11 +31,11 @@ const router = createBrowserRouter([
         element: <Tasks />, // Tasks routed to the Tasks component
       },
       {
-        path: "/login",
+        path: "login",
         element: <LoginPage />,
       },
       {
-        path: "/signup",
+        path: "signup",
         element: <SignUpPage />,
       },
       
