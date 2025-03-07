@@ -15,7 +15,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 //doar de test test
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/gymapp",
     element: (
       <ProtectedRoute allowedRoles="ADMIN">
         <App />
