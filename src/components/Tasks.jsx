@@ -23,14 +23,16 @@ export default function Tasks() {
   const fetchTasksData = async () => {
     try {
       setLoading(true);
+      const apiUrl = import.meta.env.VITE_API_URL;
 
       const config = {
         headers: { Authorization: `Bearer ${authState.authToken}` },
       };
       const response = await axios.get(
-        "http://maco-coding.go.ro:8010/tasks/all",
+        `${apiUrl}/tasks/all`,
         config
       );
+      
       setTasks(response.data);
     } catch (err) {
       console.error("Failed to fetch tasks:", err);
@@ -51,7 +53,7 @@ export default function Tasks() {
   const handleAddTask = async (newTask) => {
     try {
       const response = await axios.post(
-        "http://maco-coding.go.ro:8010/tasks/create",
+        `http://maco-coding.go.ro:8010/tasks/create`,
         newTask
       );
       fetchTasksData(); // Refresh task list
