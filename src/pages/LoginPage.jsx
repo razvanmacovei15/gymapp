@@ -42,7 +42,7 @@ const LoginPage = () => {
       if (handleLogin) {
         await handleLogin(formData.email, formData.password);
         console.log('Login successful');
-        navigate('/gymapp'); // Navigate to the home page after successful login
+        navigate('/gymapp/'); // Navigate to the home page after successful login
       } else {
         alert('Login function not found');
       }
