@@ -35,6 +35,7 @@ const items = [
 
 export function AppSidebar() {
   const { open } = useSidebar();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
