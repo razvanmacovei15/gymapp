@@ -3,7 +3,7 @@ import React from 'react';
 const NoUserPage = () => {
   
   const handleGoBack = () => {
-    window.location.href = '/login'; // Redirect to login page
+    window.location.href = '/gymapp/login'; // Redirect to login page
   };
 
   return (

@@ -97,7 +97,7 @@ const LoginPage = () => {
             <button type="submit" className="login-button" disabled={isSubmitting}>
               {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
-            <button onClick={() => navigate("/signup")} type="button" className="create-button">
+            <button onClick={() => navigate("/gymapp/signup")} type="button" className="create-button">
               Create
             </button>
           </div>

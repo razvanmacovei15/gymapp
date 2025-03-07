@@ -46,7 +46,7 @@ const SignUpPage = () => {
           formData.password,
           formData.role
         );
-        navigate("/login"); // Navigate to the login page after successful registration
+        navigate("/gymapp/login"); // Navigate to the login page after successful registration
       } else {
         alert("Register function not found");
       }
@@ -110,30 +110,7 @@ const SignUpPage = () => {
               </button>
             </div>
           </div>
-          {/* <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <div className="password-wrapper">
-              <input
-                type={confirmPasswordVisible ? "text" : "password"}
-                id="confirmPassword" // Match the key in formData
-                placeholder="Confirm your password"
-                className="input-field"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
-              <button
-                type="button"
-                className="toggle-visibility"
-                onClick={() =>
-                  setConfirmPasswordVisible(!confirmPasswordVisible)
-                }
-                aria-label="Toggle confirm password visibility"
-              >
-                👁️
-              </button>
-            </div>
-          </div> */}
+        
           <div className="button-group">
             <button
               type="submit"
@@ -143,7 +120,7 @@ const SignUpPage = () => {
               {isSubmitting ? "Creating..." : "Create"}
             </button>
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/gymapp/login")}
               type="button"
               className="signup-button"
             >
