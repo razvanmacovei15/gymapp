@@ -1,4 +1,11 @@
-import { Calendar,BookOpenCheck, LayoutDashboard,Dumbbell,ConciergeBell ,CalendarPlus} from "lucide-react"
+import {
+  Calendar,
+  BookOpenCheck,
+  LayoutDashboard,
+  Dumbbell,
+  ConciergeBell,
+  CalendarPlus,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -11,7 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const items = [
   {
@@ -24,41 +31,21 @@ const items = [
     url: "/tasks",
     icon: BookOpenCheck,
   },
-  {
-    title: "Schedule",
-    url: "/schedule",
-    icon: Calendar,
-  },
-  {
-    title: "Equipment Maintenance",
-    url: "/equipment",
-    icon: Dumbbell,
-  },
-  {
-    title: "Front Desk",
-    url: "/front-desk",
-    icon: ConciergeBell,
-  },
-  {
-    title: "Future Events",
-    url: "/future-events",
-    icon: CalendarPlus,
-  },
 ];
 
-
 export function AppSidebar() {
-  const { open} = useSidebar();
+  const { open } = useSidebar();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarHeader>
             {open ? (
-              <img 
-                src="/src/components/photos/Screenshot 2025-01-11 at 22.58.15.png" 
-                alt="My Gym" 
-                style={{ width: '100px', height: '100px', borderRadius: '50%' }} 
+              <img
+                src="/src/components/photos/Screenshot 2025-01-11 at 22.58.15.png"
+                alt="My Gym"
+                style={{ width: "100px", height: "100px", borderRadius: "50%" }}
               />
             ) : (
               ""
@@ -81,5 +68,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

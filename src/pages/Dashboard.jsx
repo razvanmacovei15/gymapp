@@ -44,7 +44,11 @@ export default function Dashboard() {
       {error ? (
         <p className="text-red-500 text-center">{error}</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full max-w-[1200px]">
+        <div>
+          <h1 className="text-white text-4xl py-5 pr-5">
+            DASHBOARD
+          </h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full max-w-[1200px]">
           {gyms.map((gym) => (
             <GymBox
               key={gym.gymId}
@@ -54,6 +58,9 @@ export default function Dashboard() {
             />
           ))}
         </div>
+      </div>
+        
+        
       )}
     </div>
   );

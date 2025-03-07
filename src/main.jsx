@@ -30,22 +30,7 @@ const router = createBrowserRouter([
         path: "tasks",
         element: <Tasks />, // Tasks routed to the Tasks component
       },
-      {
-        path: "schedule",
-        element: <UnderDevelopment />, // Schedule routed to UnderDevelopment
-      },
-      {
-        path: "equipment",
-        element: <UnderDevelopment />, // Equipment routed to UnderDevelopment
-      },
-      {
-        path: "front-desk",
-        element: <UnderDevelopment />, // Front Desk routed to UnderDevelopment
-      },
-      {
-        path: "future-events",
-        element: <UnderDevelopment />, // Front Desk routed to UnderDevelopment
-      },
+      
     ],
   },
   {
