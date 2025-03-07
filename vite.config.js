@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/gymapp",
+  base: "/",
   plugins: [react()],
   preview: {
     port: 8020,
@@ -23,6 +23,6 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 1000, // Increase limit to 1 MB
-    outDir: "dist", // Ensure build files go to dist folder
+    outDir: "build", // Ensure build files go to dist folder
   },
 });
