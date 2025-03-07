@@ -30,17 +30,18 @@ const router = createBrowserRouter([
         path: "tasks",
         element: <Tasks />, // Tasks routed to the Tasks component
       },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/signup",
+        element: <SignUpPage />,
+      },
       
     ],
   },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignUpPage />,
-  },
+  
 ]);
 
 ReactDom.createRoot(document.getElementById("root")).render(
