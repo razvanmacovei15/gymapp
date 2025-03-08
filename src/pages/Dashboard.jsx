@@ -29,7 +29,7 @@ export default function Dashboard() {
       console.error("Failed to fetch gym:", err);
       setError("Failed to fetch gym.");
     } finally {
-      setLoading(false);
+            setLoading(false);
 
     }
   };
@@ -49,16 +49,17 @@ export default function Dashboard() {
 
   return (
     <div className="p-4 bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 min-h-screen flex flex-col items-center mt-24">
-      {error ? (
+      {loading ? (
+        <p className="text-white text-xl">Loading gyms...</p>
+      ) : error ? (
         <p className="text-red-500 text-center">{error}</p>
-      ) : loading ? (
-      <p className="text-white text-center">Loading gyms...</p>
-    ) : (
+      ) : (
         <div>
           <h1 className="text-white text-4xl py-5 pr-5">
             DASHBOARD
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full max-w-[1200px]">
+          
           {gyms.map((gym) => (
             <GymBox
               key={gym.gymId}
@@ -69,8 +70,6 @@ export default function Dashboard() {
           ))}
         </div>
       </div>
-        
-        
       )}
     </div>
   );
