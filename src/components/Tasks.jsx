@@ -18,7 +18,7 @@ export default function Tasks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { openedTask } = usePopup();
-  
+
   const apiUrl = import.meta.env.VITE_API_URL;
 
 
@@ -66,25 +66,25 @@ export default function Tasks() {
   };
 
   return (
-    <div
-      className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 w-full max-w-[100vw] transition-all duration-300 mt-32  justify-center"
-      style={{
-        // marginLeft: open ? "5rem" : "15rem", // Adjust margin for sidebar state
-        padding: "1rem",
-      }}
-    >
-      <h2
-        className="text-5xl font-bold text-left mb-10 text-white  "
-        onClick={fetchTasksData}
-      >
-        TASKS
-      </h2>
+  <div
+    className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 w-full max-w-[100vw] transition-all duration-300 mt-32 justify-center"
+    style={{
+      padding: "1rem",
+    }}
+  >
+    {loading ? (
+      <p className="text-white text-center text-2xl">Loading tasks...</p>
+    ) : error ? (
+      <p className="text-red-500 text-center">{error}</p>
+    ) : (
+      <>
+        <h2
+          className="text-5xl font-bold text-left mb-10 text-white"
+          onClick={fetchTasksData}
+        >
+          TASKS
+        </h2>
 
-      {loading ? (
-        <p className="text-white text-center">Loading tasks...</p>
-      ) : error ? (
-        <p className="text-red-500 text-center">{error}</p>
-      ) : (
         <div className="space-y-4">
           <TaskTable
             tasks={tasks}
@@ -93,21 +93,24 @@ export default function Tasks() {
             fetchTasksData={fetchTasksData}
           />
         </div>
-      )}
 
-      <button
-        onClick={toggleModal}
-        className="fixed bottom-4 right-4 bg-black text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
-      >
-        +
-      </button>
+        <button
+          onClick={toggleModal}
+          className="fixed bottom-4 right-4 bg-black text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
+        >
+          +
+        </button>
 
+        {isModalOpen && (
+          <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
+        )}
 
-      {isModalOpen && (
-        <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
-      )}
+        {openedTask && (
+          <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />
+        )}
+      </>
+    )}
+  </div>
+);
 
-{openedTask && <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />}
-    </div>
-  );
 }
