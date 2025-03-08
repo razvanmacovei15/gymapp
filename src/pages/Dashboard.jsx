@@ -6,13 +6,15 @@ export default function Dashboard() {
   const [gyms, setGyms] = useState([]);
   const [error, setError] = useState(null);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+
   // Fetch gyms data from the API
   const fetchGym = async () => {
     const token = localStorage.getItem("authToken");
-    console.log("token", token);
     try {
       const response = await axios.get(
-        "http://maco-coding.go.ro:8010/gyms/dashboard",
+        `${apiUrl}/gyms/dashboard`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

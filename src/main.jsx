@@ -23,6 +23,10 @@ const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true, // This makes Dashboard the default when visiting /gymapp
+        element: <Dashboard />, 
+      },
+      {
         path: "/gymapp/dashboard",
         element: <Dashboard />, // Dashboard routed to Dashboard component
       },

@@ -17,9 +17,12 @@ export default function TopBar( ) {
 
   const [gyms, setGyms] = useState([]);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+
   const getGyms = async () => {
     const token = localStorage.getItem("authToken");
-    const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all", {
+    const response = await axios.get(`${apiUrl}/gyms/all`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

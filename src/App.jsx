@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom"; // To render child routes
 import { SidebarProvider } from "./components/ui/sidebar";
 import { AppSidebar } from "./components/side-bar/app-sidebar";
 import TopBar from "./components/TopBar";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
