@@ -6,6 +6,11 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "/gymapp/",
   plugins: [react()],
+  define: {
+    "import.meta.env.VITE_API_BASE_URL": JSON.stringify(
+      process.env.VITE_API_BASE_URL || "https://maco-gym-4331a05b6169.herokuapp.com"
+    ),
+  },
   preview: {
     port: 8020,
     strictPort: true,
