@@ -18,12 +18,13 @@ export default function Tasks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { openedTask } = usePopup();
+  const apiUrl = import.meta.env.VITE_API_URL;
+
 
   // Fetch tasks from API
   const fetchTasksData = async () => {
     try {
       setLoading(true);
-      const apiUrl = import.meta.env.VITE_API_URL;
 
       const config = {
         headers: { Authorization: `Bearer ${authState.authToken}` },
@@ -53,7 +54,7 @@ export default function Tasks() {
   const handleAddTask = async (newTask) => {
     try {
       const response = await axios.post(
-        `http://maco-coding.go.ro:8010/tasks/create`,
+        `${apiUrl}/tasks/create`,
         newTask
       );
       fetchTasksData(); // Refresh task list

@@ -9,7 +9,10 @@ import axios from "axios";
 import { User } from "./types/User";
 
 const TOKEN_KEY = "authToken";
-export const API_URL = "http://maco-coding.go.ro:8010";
+// export const API_URL = "http://maco-coding.go.ro:8010";
+// export const API_URL = "https://maco-gym-4331a05b6169.herokuapp.com";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 type AuthContextType = {
   authState: {
@@ -50,7 +53,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       const token = localStorage.getItem("authToken"); // Get the token from local storage
 
-      const result = await axios.get(`${API_URL}/minio/generate-url`, {
+      const result = await axios.get(`${apiUrl}/minio/generate-url`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +67,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   // Handle Login
   async function handleLogin(email: string, password: string) {
     try {
-      const result = await axios.post(`${API_URL}/auth/login`, {
+      const result = await axios.post(`${apiUrl}/auth/login`, {
         email,
         password,
       });
@@ -114,7 +117,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     role: string
   ) {
     try {
-      const result = await axios.post(`${API_URL}/auth/signup`, {
+      const result = await axios.post(`${apiUrl}/auth/signup`, {
         name,
         email,
         password,
@@ -147,7 +150,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       }
 
       try {
-        const response = await axios.get(`${API_URL}/auth/me`);
+        const response = await axios.get(`${apiUrl}/auth/me`);
 
         setAuthState({
           authToken: response.data.token,
