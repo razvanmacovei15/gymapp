@@ -66,51 +66,54 @@ export default function Tasks() {
   };
 
   return (
-  <div
-    className="bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 w-full max-w-[100vw] transition-all duration-300 mt-32 justify-center"
-    style={{
-      padding: "1rem",
-    }}
-  >
-    {loading ? (
-      <p className="text-white text-center text-2xl">Loading tasks...</p>
-    ) : error ? (
-      <p className="text-red-500 text-center">{error}</p>
-    ) : (
-      <>
-        <h2
-          className="text-5xl font-bold text-left mb-10 text-white"
-          onClick={fetchTasksData}
-        >
-          TASKS
-        </h2>
-
-        <div className="space-y-4">
-          <TaskTable
-            tasks={tasks}
-            loading={loading}
-            error={error}
-            fetchTasksData={fetchTasksData}
-          />
+    <div
+      className=" w-full max-w-[100vw] transition-all duration-300 mt-32 justify-center"
+      style={{
+        padding: "1rem",
+      }}
+    >
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[50vh]">
+          <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-white text-center text-2xl mt-4">Loading tasks...</p>
         </div>
-
-        <button
-          onClick={toggleModal}
-          className="fixed bottom-4 right-4 bg-black text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
-        >
-          +
-        </button>
-
-        {isModalOpen && (
-          <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
-        )}
-
-        {openedTask && (
-          <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />
-        )}
-      </>
-    )}
-  </div>
-);
+      ) : error ? (
+        <p className="text-red-500 text-center">{error}</p>
+      ) : (
+        <>
+          <h2
+            className="text-5xl font-bold text-left mb-10 text-white"
+            onClick={fetchTasksData}
+          >
+            TASKS
+          </h2>
+  
+          <div className="space-y-4">
+            <TaskTable
+              tasks={tasks}
+              loading={loading}
+              error={error}
+              fetchTasksData={fetchTasksData}
+            />
+          </div>
+  
+          <button
+            onClick={toggleModal}
+            className="fixed bottom-4 right-4 bg-black text-white rounded-full h-12 w-12 flex items-center justify-center shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
+          >
+            +
+          </button>
+  
+          {isModalOpen && (
+            <AddTaskModal onSubmit={handleAddTask} onClose={toggleModal} />
+          )}
+  
+          {openedTask && (
+            <TaskViewPopup onTaskUpdate={fetchTasksData} initialTask={openedTask} />
+          )}
+        </>
+      )}
+    </div>
+  );
 
 }

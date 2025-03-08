@@ -48,13 +48,16 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-4 bg-gradient-to-b from-gray-950 via-gray-950 to-pink-950 min-h-screen flex flex-col items-center mt-24">
+    <div className="p-4  min-h-screen flex flex-col items-center mt-24">
       {loading ? (
-        <p className="text-white text-xl">Loading gyms...</p>
+        <div className="flex flex-col items-center justify-center h-[50vh]">
+        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-white text-center text-2xl mt-4">Loading gyms...</p>
+      </div>
       ) : error ? (
         <p className="text-red-500 text-center">{error}</p>
       ) : (
-        <div>
+        <>
           <h1 className="text-white text-4xl py-5 pr-5">
             DASHBOARD
           </h1>
@@ -69,7 +72,7 @@ export default function Dashboard() {
             />
           ))}
         </div>
-      </div>
+      </>
       )}
     </div>
   );
