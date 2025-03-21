@@ -19,9 +19,12 @@ export default function AddTaskModal({ onSubmit, onClose }) {
   const [categories, setCategories] = useState([]);
   const [isGymSelected, setIsGymSelected] = useState(false); // Track if a gym is selected
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+
   const fetchManagersByGymIds = async (gymIds) => {
     try {
-      const response = await axios.post("http://maco-coding.go.ro:8010/gyms/getManagers", 
+      const response = await axios.post(`${apiUrl}/gyms/getManagers`, 
        gymIds, 
         {
           headers: {
@@ -39,7 +42,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   const getGyms = async () => {
     try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/gyms/all");
+      const response = await axios.get(`${apiUrl}/gyms/all`);
       setGyms(response.data);
     } catch (error) {
       console.error("Failed to fetch gyms:", error);
@@ -48,7 +51,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://maco-coding.go.ro:8010/api/enum/categories");
+      const response = await axios.get(`${apiUrl}/api/enum/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
