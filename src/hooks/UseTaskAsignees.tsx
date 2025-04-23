@@ -15,15 +15,14 @@ export const useTaskAsignees = (initialTaskAsignees: User[]) => {
   const [error, setError] = useState<string | null>(null);
 
   const [taskAsignees, setTaskAsignees] = useState<User[]>(initialTaskAsignees);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchAsignees = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(
-          "http://maco-coding.go.ro:8010/api/users/managers"
-        );
+        const response = await axios.get(`${apiUrl}/api/users/managers`);
 
         console.log(response.data);
         setTotalAsignees(response.data);

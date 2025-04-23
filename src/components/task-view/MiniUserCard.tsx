@@ -11,19 +11,17 @@ type MiniUserCardProps = {
 
 const MiniUserCard = ({ user }: MiniUserCardProps) => {
   const [presignedUrl, setPresignedUrl] = useState<string>("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   //todo method that gets managers presignedurl
 
   async function getPresignedUrl() {
     try {
-      const result = await axios.get(
-        `http://maco-coding.go.ro:8010/minio/generate-manager-url`,
-        {
-          params: {
-            userId: user?.id,
-          },
-        }
-      );
+      const result = await axios.get(`${apiUrl}/minio/generate-manager-url`, {
+        params: {
+          userId: user?.id,
+        },
+      });
       setPresignedUrl(result.data);
       return result.data;
     } catch (error) {

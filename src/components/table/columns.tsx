@@ -19,6 +19,7 @@ import {
 import { DataTableColumnHeader } from "./column-header";
 import { usePopup } from "../popups/PopupContext";
 import axios from "axios";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const columns = (fetchTasksData: () => void): ColumnDef<Task>[] => [
   {
@@ -99,12 +100,9 @@ export const columns = (fetchTasksData: () => void): ColumnDef<Task>[] => [
       const handleDelete = async () => {
         console.log(`Deleting task-${task.taskId}`);
         try {
-          const response = await axios.delete(
-            "http://maco-coding.go.ro:8010/tasks/delete",
-            {
-              params: { id: task.taskId },
-            }
-          );
+          const response = await axios.delete(`${apiUrl}/tasks/delete`, {
+            params: { id: task.taskId },
+          });
           fetchTasksData();
         } catch (error) {
           console.error("Error deleting task:", error);

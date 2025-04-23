@@ -32,6 +32,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
           },
         }
       );
+
       console.log("Response from server:", response.data);
       setUsers(response.data);
     } catch (error) {
@@ -44,6 +45,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
     try {
       const response = await axios.get(`${apiUrl}/gyms/all`);
       setGyms(response.data);
+      console.log(apiUrl + "add task modal")
     } catch (error) {
       console.error("Failed to fetch gyms:", error);
     }
@@ -51,6 +53,7 @@ export default function AddTaskModal({ onSubmit, onClose }) {
 
   const fetchCategories = async () => {
     try {
+      
       const response = await axios.get(`${apiUrl}/api/enum/categories`);
       setCategories(response.data);
     } catch (error) {

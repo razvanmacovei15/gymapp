@@ -4,12 +4,11 @@ import axios from "axios";
 
 export const useTaskStatuses = () => {
   const [statuses, setStatuses] = useState<string[]>([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchStatuses = async () => {
     try {
-      const result = await axios.get(
-        "http://maco-coding.go.ro:8010/api/enum/statuses"
-      );
+      const result = await axios.get(`${apiUrl}/api/enum/statuses`);
       setStatuses(result.data);
     } catch (error) {
       console.error("Error fetching statuses:", error);
@@ -20,5 +19,5 @@ export const useTaskStatuses = () => {
     fetchStatuses();
   }, []);
 
-  return {statuses,};
+  return { statuses };
 };

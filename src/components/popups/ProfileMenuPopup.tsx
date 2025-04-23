@@ -15,6 +15,7 @@ const ProfileMenuPopup = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for the hidden file input
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {
@@ -41,7 +42,7 @@ const ProfileMenuPopup = () => {
     try {
       // Upload the file to the server
       const result = await axios.post(
-        "http://maco-coding.go.ro:8010/api/users/uploadFile",
+        `${apiUrl}/api/users/uploadFile`,
         formData,
         {
           headers: {

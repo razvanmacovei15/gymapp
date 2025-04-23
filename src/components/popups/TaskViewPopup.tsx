@@ -51,14 +51,13 @@ const TaskViewPopup = ({ initialTask, onTaskUpdate }: TaskViewPopupProps) => {
     task?.users || []
   );
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const getTask = async (taskId: number) => {
     try {
-      const response = await axios.get(
-        "http://maco-coding.go.ro:8010/tasks/get",
-        {
-          params: { id: taskId },
-        }
-      );
+      const response = await axios.get(`${apiUrl}/tasks/get`, {
+        params: { id: taskId },
+      });
       setTask(response.data);
       return response.data;
     } catch (error) {
@@ -83,7 +82,7 @@ const TaskViewPopup = ({ initialTask, onTaskUpdate }: TaskViewPopupProps) => {
     try {
       // Save the updated task to the server
       const response = await axios.patch(
-        "http://maco-coding.go.ro:8010/tasks/update",
+        `${apiUrl}/tasks/update`,
         updatedTask,
         {
           params: {

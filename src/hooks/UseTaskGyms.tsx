@@ -14,15 +14,14 @@ export const useGymItems = (initialTaskGyms: Gym[]) => {
   const [error, setError] = useState<string | null>(null);
 
   const [taskGyms, setTaskGyms] = useState<Gym[]>(initialTaskGyms);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchGyms = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(
-          "http://maco-coding.go.ro:8010/gyms/all"
-        );
+        const response = await axios.get(`${apiUrl}/gyms/all`);
         setTotalGyms(response.data);
       } catch (err) {
         setError("Failed to fetch gyms");

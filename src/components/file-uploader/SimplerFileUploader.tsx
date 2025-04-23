@@ -12,6 +12,7 @@ const SimplerFileUploader: React.FC<FileUploaderProps> = ({
 }) => {
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -24,21 +25,17 @@ const SimplerFileUploader: React.FC<FileUploaderProps> = ({
     formData.append("file", file);
 
     try {
-      await axios.post(
-        "http://maco-coding.go.ro:8010/minio/uploadFile",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = progressEvent.total
-              ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
-              : 0;
-            setUploadProgress(progress);
-          },
-        }
-      );
+      await axios.post(`${apiUrl}/minio/uploadFile`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = progressEvent.total
+            ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            : 0;
+          setUploadProgress(progress);
+        },
+      });
       setUploadStatus("success");
       setUploadProgress(100);
 

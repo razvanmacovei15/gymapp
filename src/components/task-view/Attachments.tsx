@@ -16,6 +16,7 @@ export const Attachments = ({ taskId }: AttachmentsProps) => {
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [files, setFiles] = useState<string[]>([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleAddFileClick = () => {
     if (fileInputRef.current) {
@@ -39,13 +40,10 @@ export const Attachments = ({ taskId }: AttachmentsProps) => {
 
   const downloadFile = async (file: string) => {
     try {
-      const response = await axios.get(
-        "http://maco-coding.go.ro:8010/tasks/downloadFile",
-        {
-          params: { taskId, fileName: file },
-          responseType: "blob", // Handle binary file download
-        }
-      );
+      const response = await axios.get(`${apiUrl}/tasks/downloadFile`, {
+        params: { taskId, fileName: file },
+        responseType: "blob", // Handle binary file download
+      });
 
       // Create a URL for the downloaded file
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -62,12 +60,9 @@ export const Attachments = ({ taskId }: AttachmentsProps) => {
 
   const getFiles = async () => {
     try {
-      const response = await axios.get(
-        "http://maco-coding.go.ro:8010/tasks/getFiles",
-        {
-          params: { taskId },
-        }
-      );
+      const response = await axios.get(`${apiUrl}/tasks/getFiles`, {
+        params: { taskId },
+      });
       console.log("Files:", response.data);
       setFiles(response.data);
     } catch (error) {
@@ -77,12 +72,9 @@ export const Attachments = ({ taskId }: AttachmentsProps) => {
 
   const deleteFile = async (file: string) => {
     try {
-      const response = await axios.delete(
-        "http://maco-coding.go.ro:8010/tasks/deleteFile",
-        {
-          params: { taskId, fileName: file },
-        }
-      );
+      const response = await axios.delete(`${apiUrl}/tasks/deleteFile`, {
+        params: { taskId, fileName: file },
+      });
       console.log("File deleted:", response.data);
       getFiles();
     } catch (error) {
@@ -107,7 +99,7 @@ export const Attachments = ({ taskId }: AttachmentsProps) => {
 
     try {
       const response = await axios.post(
-        `http://maco-coding.go.ro:8010/tasks/uploadFile`,
+        `${apiUrl}/tasks/uploadFile`,
         formData,
         {
           params: { taskId },

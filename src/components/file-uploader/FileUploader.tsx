@@ -9,6 +9,7 @@ export default function FileUploader() {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [bucketName, setBucketName] = useState<string>(""); // New state for bucket name
   const [objectName, setObjectName] = useState<string>(""); // New state for object name
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
@@ -36,21 +37,17 @@ export default function FileUploader() {
     formData.append("objectName", objectName);
 
     try {
-      await axios.post(
-        "http://maco-coding.go.ro:8010/minio/uploadFile",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = progressEvent.total
-              ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
-              : 0;
-            setUploadProgress(progress);
-          },
-        }
-      );
+      await axios.post(`${apiUrl}/minio/uploadFile`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = progressEvent.total
+            ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            : 0;
+          setUploadProgress(progress);
+        },
+      });
       setUploadStatus("success");
       setUploadProgress(100);
     } catch {

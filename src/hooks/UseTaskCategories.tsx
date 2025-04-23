@@ -7,9 +7,7 @@ export const useTaskCategories = () => {
 
   const fetchStatuses = async () => {
     try {
-      const result = await axios.get(
-        "http://maco-coding.go.ro:8010/api/enum/categories"
-      );
+      const result = await axios.get("http://.go.ro:8010/api/enum/categories");
       setCategories(result.data);
     } catch (error) {
       console.error("Error fetching statuses:", error);
@@ -20,5 +18,5 @@ export const useTaskCategories = () => {
     fetchStatuses();
   }, []);
 
-  return {categories,};
+  return { categories };
 };
