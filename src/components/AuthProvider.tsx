@@ -124,6 +124,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         role,
       });
 
+      console.log(apiUrl);
+
       if (result.status === 200 || result.status === 201) {
         return handleLogin(email, password);
       }

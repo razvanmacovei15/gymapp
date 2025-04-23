@@ -46,6 +46,7 @@ const SignUpPage = () => {
           formData.password,
           formData.role
         );
+        console.log(formData)
         navigate("/gymapp/login"); // Navigate to the login page after successful registration
       } else {
         alert("Register function not found");
