@@ -4,10 +4,11 @@ import axios from "axios";
 
 export const useTaskCategories = () => {
   const [categories, setCategories] = useState<string[]>([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchStatuses = async () => {
     try {
-      const result = await axios.get("http://.go.ro:8010/api/enum/categories");
+      const result = await axios.get(`${apiUrl}/api/enum/categories`);
       setCategories(result.data);
     } catch (error) {
       console.error("Error fetching statuses:", error);
