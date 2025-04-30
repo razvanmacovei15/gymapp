@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuth } from "../AuthProvider";
 
 const items = [
   {
@@ -38,19 +39,10 @@ const items = [
 export function AppSidebar() {
   const { open } = useSidebar();
   const apiUrl = import.meta.env.VITE_API_URL;
-  const [logoUrl, setLogoUrl] = useState<string>("");
 
+  const { logoUrl, fetchLogo } = useAuth();
   useEffect(() => {
-    console.log("API URL:", apiUrl);
-    fetch(`${apiUrl}/api/logo`)
-      .then((res) => res.text())
-      .then((url) => {
-        console.log("Received logo URL from backend:", url);
-        setLogoUrl(url);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch logo URL:", err);
-      });
+    fetchLogo();
   }, []);
 
   return (

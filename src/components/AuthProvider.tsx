@@ -29,6 +29,8 @@ type AuthContextType = {
   ) => Promise<any>;
   fetchProfilePhoto: () => Promise<void>;
   profilePhoto: string;
+  fetchLogo: () => Promise<string | undefined>;
+  logoUrl: string;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,6 +50,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       : null,
   });
 
+  const [logoUrl, setLogoUrl] = useState<string>("");
+
   // Fetch Profile Photo
   async function fetchProfilePhoto() {
     try {
@@ -61,6 +65,21 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       setProfilePhoto(result.data);
     } catch (error) {
       console.error("Error fetching profile photo:", error);
+    }
+  }
+
+  async function fetchLogo() {
+    try {
+      const result = await axios.get(`${apiUrl}/api/logo`, {
+        headers: {
+          Authorization: `Bearer ${authState.authToken}`,
+        },
+      });
+      setLogoUrl(result.data);
+      console.log("Logo URL:", result.data);
+      return result.data;
+    } catch (error) {
+      console.error("Error fetching logo:", error);
     }
   }
 
@@ -178,6 +197,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     handleRegister,
     profilePhoto,
     fetchProfilePhoto,
+    fetchLogo,
+    logoUrl,
   };
 
   return (
