@@ -9,7 +9,10 @@ export default function Dashboard() {
   
 
   const apiUrl = import.meta.env.VITE_API_URL;
-
+  const { logoUrl, fetchLogo } = useAuth();
+    useEffect(() => {
+      fetchLogo();
+    }, []);
 
   // Fetch gyms data from the API
   const fetchGym = async () => {
@@ -67,7 +70,7 @@ export default function Dashboard() {
             <GymBox
               key={gym.gymId}
               gymName={gym.gymName}
-              photoUrl={`${apiUrl}/api/logo`}
+              photoUrl={logoUrl}
               taskData={getTaskDataForPieChart(gym)}
             />
           ))}
