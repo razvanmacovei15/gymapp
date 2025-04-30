@@ -1,6 +1,7 @@
 import React from "react";
 import { PieChart, Pie, Sector, Label, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "./Card.jsx";
+import { useAuth } from "../AuthProvider";
 
 const COLORS = ["#81d9b9", "#4d6792", "#d388aa", "#e94949", "#ffc107"];
 
