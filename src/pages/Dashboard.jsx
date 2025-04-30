@@ -67,7 +67,7 @@ export default function Dashboard() {
             <GymBox
               key={gym.gymId}
               gymName={gym.gymName}
-              photoUrl={`src/components/photos/Screenshot 2025-01-11 at 22.58.15.png`}
+              photoUrl={`${apiUrl}/api/logo`}
               taskData={getTaskDataForPieChart(gym)}
             />
           ))}

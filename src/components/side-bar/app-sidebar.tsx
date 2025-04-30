@@ -36,6 +36,7 @@ const items = [
 
 export function AppSidebar() {
   const { open } = useSidebar();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   return (
     <Sidebar collapsible="icon">
@@ -44,7 +45,7 @@ export function AppSidebar() {
           <SidebarHeader>
             {open ? (
               <img
-                src="/src/components/photos/Screenshot 2025-01-11 at 22.58.15.png"
+                src={`${apiUrl}/api/logo`}
                 alt="My Gym"
                 style={{ width: "100px", height: "100px", borderRadius: "50%" }}
               />

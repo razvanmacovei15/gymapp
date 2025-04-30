@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
 import AuthProvider from "./components/AuthProvider.tsx";
@@ -12,11 +12,14 @@ import { PopupProvider } from "./components/popups/PopupContext";
 import Tasks from "./components/Tasks.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 
+const Router =
+  import.meta.env.MODE === "development" ? BrowserRouter : HashRouter;
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <PopupProvider>
-        <HashRouter>
+        <Router>
           <Routes>
             {/* Protected routes under /gymapp */}
             <Route
@@ -36,7 +39,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/gymapp/login" element={<LoginPage />} />
             <Route path="/gymapp/signup" element={<SignUpPage />} />
           </Routes>
-        </HashRouter>
+        </Router>
       </PopupProvider>
     </AuthProvider>
   </StrictMode>
