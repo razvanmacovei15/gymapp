@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import GymBox from "../components/GymBox";
+import { useAuth } from "../components/AuthProvider";
 
 export default function Dashboard() {
   const [gyms, setGyms] = useState([]);
