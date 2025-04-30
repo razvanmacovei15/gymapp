@@ -6,7 +6,10 @@ const COLORS = ["#81d9b9", "#4d6792", "#d388aa", "#e94949", "#ffc107"];
 
 const GymBox = ({ gymName, photoUrl, taskData }) => {
   const totalTasks = taskData.reduce((sum, task) => sum + task.value, 0);
-
+  const { logoUrl, fetchLogo } = useAuth();
+    useEffect(() => {
+      fetchLogo();
+    }, []);
   const renderActiveShape = (props) => {
     const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
       props;
@@ -47,7 +50,7 @@ const GymBox = ({ gymName, photoUrl, taskData }) => {
       {/* Left Section: Title and Logo */}
       <div className="flex flex-col items-center w-1/2">
         <img
-          src={photoUrl}
+          src={logoUrl}
           alt={`${gymName} logo`}
           className="w-40 h-40 rounded-md mb-4"
         />
