@@ -20,6 +20,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const items = [
   {
@@ -37,6 +38,20 @@ const items = [
 export function AppSidebar() {
   const { open } = useSidebar();
   const apiUrl = import.meta.env.VITE_API_URL;
+  const [logoUrl, setLogoUrl] = useState<string>("");
+
+  useEffect(() => {
+    console.log("API URL:", apiUrl);
+    fetch(`${apiUrl}/api/logo`)
+      .then((res) => res.text())
+      .then((url) => {
+        console.log("Received logo URL from backend:", url);
+        setLogoUrl(url);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch logo URL:", err);
+      });
+  }, []);
 
   return (
     <Sidebar collapsible="icon">
@@ -45,7 +60,7 @@ export function AppSidebar() {
           <SidebarHeader>
             {open ? (
               <img
-                src={`${apiUrl}/api/logo`}
+                src={`${logoUrl}`}
                 alt="My Gym"
                 style={{ width: "100px", height: "100px", borderRadius: "50%" }}
               />
