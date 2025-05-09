@@ -76,7 +76,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         },
       });
       setLogoUrl(result.data);
-      console.log("Logo URL:", result.data);
       return result.data;
     } catch (error) {
       console.error("Error fetching logo:", error);

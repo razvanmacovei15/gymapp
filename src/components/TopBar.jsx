@@ -9,16 +9,14 @@ import { useSidebar } from "./ui/sidebar";
 import { usePopup } from "./popups/PopupContext";
 import ProfileMenuPopup from "./popups/ProfileMenuPopup";
 
-export default function TopBar( ) {
-
+export default function TopBar() {
   const { toggleProfileMenu } = usePopup();
 
-  const {open, toggleSidebar} = useSidebar();
+  const { open, toggleSidebar } = useSidebar();
 
   const [gyms, setGyms] = useState([]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
-
 
   const getGyms = async () => {
     const token = localStorage.getItem("authToken");
@@ -53,12 +51,9 @@ export default function TopBar( ) {
           locations={gyms}
           onLocationChange={handleLocationChange}
         />
-        <UserNav toggleProfileMenu={toggleProfileMenu}/>
-        <ProfileMenuPopup/>
-
-
+        <UserNav toggleProfileMenu={toggleProfileMenu} />
+        <ProfileMenuPopup />
       </div>
     </header>
-
   );
 }
